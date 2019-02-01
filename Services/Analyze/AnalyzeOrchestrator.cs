@@ -1,5 +1,7 @@
-﻿using kedi.engine.Services.Sessions;
+﻿using kedi.engine.ConsoleSimulation;
+using kedi.engine.Services.Sessions;
 using Microsoft.Diagnostics.Runtime;
+using Microsoft.Diagnostics.Runtime.Interop;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -21,7 +23,10 @@ namespace kedi.engine.Services.Analyze
             if(!activeRuntimes.ContainsKey(sessionId))
             {
                 Session session = sessionManager.GetById(sessionId);
-                ClrRuntime createdRuntime = CreateRuntime(ConfigurationManager.AppSettings["DataPath"] + "\\" + session.Identifier);           
+                ClrRuntime createdRuntime = CreateRuntime(ConfigurationManager.AppSettings["DataPath"] + "\\" + session.Identifier);
+                var debuggerInterface = (IDebugClient5)createdRuntime.DataTarget.DebuggerInterface;
+                var outputCallbacks = new OutputCallbacks();
+                debuggerInterface.SetOutputCallbacksWide(outputCallbacks);
 
                 activeRuntimes.Add(sessionId,createdRuntime);
             }

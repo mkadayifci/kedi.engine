@@ -88,7 +88,8 @@ namespace kedi.engine.Controllers
                  {
                      module.Name,
                      AppDomains = new List<dynamic>(),
-                     module.FileName,
+                     FullPath=module.FileName,
+                     FileName= System.IO.Path.GetFileName(module.FileName),
                      module.Pdb,
                      module.AssemblyName,
                      module.DebuggingMode

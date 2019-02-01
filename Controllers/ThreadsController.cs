@@ -54,7 +54,7 @@ namespace kedi.engine.Controllers
                     threadObject.StackObjects.Add(new
                     {
                         TypeName = stackObj.Type.Name,
-                        Address = stackObj.Address
+                        ObjectAddress = stackObj.Object
 
                     });
                 }

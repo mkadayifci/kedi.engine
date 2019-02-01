@@ -34,6 +34,7 @@ namespace kedi.engine
 
             app
             .UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll)
+            .MapSignalR()
             .UseWebApi(config);
 
         }
