@@ -22,11 +22,20 @@ namespace kedi.engine.Controllers
             var returnValue = new
             {
                 ObjectPointer = objPtr,
-                type.ElementType,
+                clrObject.HexAddress,
+                clrObject.Size,
+                clrObject.IsArray,
+                clrObject.IsBoxed,
+                clrObject.IsNull,
+                BaseTypeName=type.BaseType?.Name,
+                type.MethodTable,
+                ElementType= type.ElementType.ToString(),
                 TypeName = type.Name,
                 ObjectValue = type.GetValue(objPtr),
                 Members = new List<dynamic>(),
-                Values = new List<DateTime>()
+                Values = new List<DateTime>(),
+                Module=type.Module.Name
+
             };
 
             try
@@ -55,8 +64,13 @@ namespace kedi.engine.Controllers
 
                     var gg = fieldDetail.Value;
                 }
-                var val = field.GetValue(fieldDetail.Address);
+                try
+                {
+                    var val = field.GetValue(fieldDetail.Address);
+                }
+                catch { }
                 returnValue.Members.Add(fieldDetail);
+
             }
             return returnValue;
         }
