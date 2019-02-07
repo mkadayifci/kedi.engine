@@ -34,6 +34,7 @@ namespace kedi.engine.Controllers
                 threadObject.IsBackground = thread.IsBackground;                
                 threadObject.CurrentExceptionAddress = thread.CurrentException?.Address;
                 threadObject.CurrentExceptionType = thread.CurrentException?.Type.Name;
+                threadObject.LockCount = thread.LockCount;
                 threadObject.StackTrace = new List<dynamic>();
                 threadObject.StackObjects = new List<dynamic>();
 
@@ -47,16 +48,23 @@ namespace kedi.engine.Controllers
                         frame.ModuleName,
                     });
                 }
-
+                var addedObjectAddresses = new List<ulong>();
                 foreach (var stackObj in thread.EnumerateStackObjects())
                 {
                     var type = clrRuntime.Heap.GetObjectType(stackObj.Object);
-                    threadObject.StackObjects.Add(new
-                    {
-                        TypeName = stackObj.Type.Name,
-                        ObjectAddress = stackObj.Object
+                    List<int> c = new List<int>();
+                   var d =  c.Exists(item => item == 2);
 
-                    });
+                    if (!addedObjectAddresses.Contains(stackObj.Object))
+                    {
+                        addedObjectAddresses.Add(stackObj.Object);
+                        threadObject.StackObjects.Add(new
+                        {
+                            TypeName = stackObj.Type.Name,
+                            ObjectAddress = stackObj.Object
+
+                        });
+                    }
                 }
                 threads.Add(threadObject);
 

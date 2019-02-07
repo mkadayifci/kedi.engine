@@ -26,7 +26,13 @@ namespace kedi.engine.Controllers
                 DacInfo = clrRuntime.ClrInfo.DacInfo.PlatformAgnosticFileName,
                 TargetArchitecture = clrRuntime.ClrInfo.DacInfo.TargetArchitecture.ToString(),
 
-                AppDomains = new List<dynamic>()
+                AppDomains = new List<dynamic>(),
+                Is64Bit = clrRuntime?.DataTarget?.PointerSize == 8,
+                GCMode= clrRuntime.ServerGC?"ServerGC":"WorkstationGC",
+                ThreadCount= clrRuntime.Threads.Count,
+                clrRuntime.HeapCount,
+                clrRuntime.DataTarget?.DataReader?.IsMinidump
+
 
             };
 

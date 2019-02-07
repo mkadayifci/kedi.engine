@@ -17,23 +17,22 @@ namespace kedi.engine.ConsoleSimulation{
 
         public int Output(DEBUG_OUTPUT mask, string text)
         {
-            Console.WriteLine(text);
-            //switch (mask)
-            //{
-            //    case DEBUG_OUTPUT.ERROR:
-            //        context.WriteError(text.TrimEnd('\n', '\r'));
-            //        break;
-            //    case DEBUG_OUTPUT.EXTENSION_WARNING:
-            //    case DEBUG_OUTPUT.WARNING:
-            //        context.WriteWarning(text.TrimEnd('\n', '\r'));
-            //        break;
-            //    case DEBUG_OUTPUT.SYMBOLS:
-            //        context.WriteInfo(text.TrimEnd('\n', '\r'));
-            //        break;
-            //    default:
-            //        context.WriteLine(text);
-            //        break;
-            //}
+            switch (mask)
+            {
+                case DEBUG_OUTPUT.ERROR:
+                    Console.Write(text.TrimEnd('\n', '\r'));
+                    break;
+                case DEBUG_OUTPUT.EXTENSION_WARNING:
+                case DEBUG_OUTPUT.WARNING:
+                    Console.Write(text.TrimEnd('\n', '\r'));
+                    break;
+                case DEBUG_OUTPUT.SYMBOLS:
+                    Console.Write(text.TrimEnd('\n', '\r'));
+                    break;
+                default:
+                    Console.Write(text );
+                    break;
+            }
 
             var jj = GlobalHost.ConnectionManager.GetHubContext<SignalRHub>();
             jj.Clients.All.ReceiveMessage(text);

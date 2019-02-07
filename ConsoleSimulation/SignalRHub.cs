@@ -14,7 +14,13 @@ namespace kedi.engine.ConsoleSimulation
         {
             ClrRuntime runtime = analyzeOrchestrator.GetRuntimeBySessionId(sessionId);
             var debuggerControl = (IDebugControl5)runtime.DataTarget.DebuggerInterface;
+
+            if (command == "l")
+            {
+                command = @".cordll -lp C:\DumpAnalyze\x64\";
+            }
             debuggerControl.ExecuteWide(DEBUG_OUTCTL.THIS_CLIENT, command, DEBUG_EXECUTE.DEFAULT);
+            
         }
     }
 }

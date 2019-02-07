@@ -1,4 +1,5 @@
 ﻿using kedi.engine.ConsoleSimulation;
+using kedi.engine.MemoryRepresentation;
 using kedi.engine.Services.Sessions;
 using Microsoft.Diagnostics.Runtime;
 using Microsoft.Diagnostics.Runtime.Interop;
@@ -17,14 +18,32 @@ namespace kedi.engine.Services.Analyze
         ISessionManager sessionManager = ContainerManager.Container.Resolve<ISessionManager>();
 
         public Dictionary<string, ClrRuntime> activeRuntimes = new Dictionary<string, ClrRuntime>();
+        public Dictionary<string, MemoryMap> activeMemoryMaps = new Dictionary<string, MemoryMap>();
 
-        public ClrRuntime GetRuntimeBySessionId(string sessionId)
+        public MemoryMap GetMemoryMapBySessionId(string sessionId)
+        {
+            if (!activeMemoryMaps.ContainsKey(sessionId))
+            {
+                var createdMemoryMap= (new MemoryMapGenerator()).GenerateMemoryMap(this.GetRuntimeBySessionId(sessionId));
+                activeMemoryMaps.Add(sessionId, createdMemoryMap);
+            }
+            return activeMemoryMaps[sessionId];
+        }
+
+            public ClrRuntime GetRuntimeBySessionId(string sessionId)
         {
             if(!activeRuntimes.ContainsKey(sessionId))
             {
                 Session session = sessionManager.GetById(sessionId);
                 ClrRuntime createdRuntime = CreateRuntime(ConfigurationManager.AppSettings["DataPath"] + "\\" + session.Identifier);
                 var debuggerInterface = (IDebugClient5)createdRuntime.DataTarget.DebuggerInterface;
+
+
+                var debuggerControl = (IDebugControl5)createdRuntime.DataTarget.DebuggerInterface;
+                debuggerControl.AddExtension(@"C:\DumpAnalyze\x64\SOS.dll", 0, out ulong handle);
+                
+                //debuggerControl.AddExtension(@"C:\DumpAnalyze\x64\mscordacwks_amd64_amd64_4.0.30319.34209.dll", 0, out ulong handle2);
+
                 var outputCallbacks = new OutputCallbacks();
                 debuggerInterface.SetOutputCallbacksWide(outputCallbacks);
 

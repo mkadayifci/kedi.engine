@@ -1,4 +1,5 @@
-﻿using kedi.engine.Services.Analyze;
+﻿using kedi.engine.MemoryRepresentation;
+using kedi.engine.Services.Analyze;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,12 @@ namespace kedi.engine.Services.Sessions
         public string Identifier { get; set; }
         public string SessionId { get; set; }
         public string SourceName { get; set; }
-        
-        public Session()
-        {
-            
 
+        public Session(string identifier, string sessionId,string sourceName)
+        {
+            this.Identifier = identifier;
+            this.SessionId = sessionId;
+            this.SourceName = sourceName;
         }
     }
 }
