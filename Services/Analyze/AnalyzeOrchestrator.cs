@@ -1,19 +1,14 @@
-﻿using kedi.engine.ConsoleSimulation;
-using kedi.engine.MemoryRepresentation;
+﻿using kedi.engine.MemoryRepresentation;
 using kedi.engine.Services.Sessions;
 using Microsoft.Diagnostics.Runtime;
-using Microsoft.Diagnostics.Runtime.Interop;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace kedi.engine.Services.Analyze
 {
-    public class AnalyzeOrchestrator: IAnalyzeOrchestrator
+    public class AnalyzeOrchestrator : IAnalyzeOrchestrator
     {
         ISessionManager sessionManager = ContainerManager.Container.Resolve<ISessionManager>();
 
@@ -24,30 +19,30 @@ namespace kedi.engine.Services.Analyze
         {
             if (!activeMemoryMaps.ContainsKey(sessionId))
             {
-                var createdMemoryMap= (new MemoryMapGenerator()).GenerateMemoryMap(this.GetRuntimeBySessionId(sessionId));
+                var createdMemoryMap = (new MemoryMapGenerator()).GenerateMemoryMap(this.GetRuntimeBySessionId(sessionId));
                 activeMemoryMaps.Add(sessionId, createdMemoryMap);
             }
             return activeMemoryMaps[sessionId];
         }
 
-            public ClrRuntime GetRuntimeBySessionId(string sessionId)
+        public ClrRuntime GetRuntimeBySessionId(string sessionId)
         {
-            if(!activeRuntimes.ContainsKey(sessionId))
+            if (!activeRuntimes.ContainsKey(sessionId))
             {
                 Session session = sessionManager.GetById(sessionId);
                 ClrRuntime createdRuntime = CreateRuntime(ConfigurationManager.AppSettings["DataPath"] + "\\" + session.Identifier);
-                var debuggerInterface = (IDebugClient5)createdRuntime.DataTarget.DebuggerInterface;
 
 
-                var debuggerControl = (IDebugControl5)createdRuntime.DataTarget.DebuggerInterface;
-                debuggerControl.AddExtension(@"C:\DumpAnalyze\x64\SOS.dll", 0, out ulong handle);
-                
-                //debuggerControl.AddExtension(@"C:\DumpAnalyze\x64\mscordacwks_amd64_amd64_4.0.30319.34209.dll", 0, out ulong handle2);
+                //var debuggerInterface = (IDebugClient5)createdRuntime.DataTarget.DebuggerInterface;
+                //var debuggerControl = (IDebugControl5)createdRuntime.DataTarget.DebuggerInterface;
+                //debuggerControl.AddExtension(@"C:\DumpAnalyze\x64\SOS.dll", 0, out ulong handle);
 
-                var outputCallbacks = new OutputCallbacks();
-                debuggerInterface.SetOutputCallbacksWide(outputCallbacks);
+                ////debuggerControl.AddExtension(@"C:\DumpAnalyze\x64\mscordacwks_amd64_amd64_4.0.30319.34209.dll", 0, out ulong handle2);
 
-                activeRuntimes.Add(sessionId,createdRuntime);
+                //var outputCallbacks = new OutputCallbacks();
+                //debuggerInterface.SetOutputCallbacksWide(outputCallbacks);
+
+                activeRuntimes.Add(sessionId, createdRuntime);
             }
             return activeRuntimes[sessionId];
         }

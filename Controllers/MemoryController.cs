@@ -1,5 +1,6 @@
 ﻿using kedi.engine.Services.Analyze;
 using Microsoft.Diagnostics.Runtime;
+using System;
 using System.Collections.Generic;
 using System.Web.Http;
 
@@ -17,6 +18,7 @@ namespace kedi.engine.Controllers
             var returnValue = new
             {
                 Heaps = new List<dynamic>(),
+                StatsByType = new Dictionary<string, HeapTypeStat>(),
                 runtime.Heap.TotalHeapSize
             };
 
@@ -29,23 +31,19 @@ namespace kedi.engine.Controllers
                     seg.Gen0Length,
                     seg.Gen1Length,
                     seg.Gen2Length,
-                    StatsByType = new Dictionary<string, HeapTypeStat>()
-
+                    StatsByType = new Dictionary<string, HeapTypeStat>(),
                 };
 
                 for (ulong obj = seg.FirstObject; obj != 0; obj = seg.NextObject(obj))
                 {
                     // This gets the type of the object.
                     ClrType type = runtime.Heap.GetObjectType(obj);
-                    ulong size = type.GetSize(obj);
-                    if (segmentInfo.StatsByType.ContainsKey(type.Name))
+                    if (type != null)
                     {
-                        segmentInfo.StatsByType[type.Name].Count = segmentInfo.StatsByType[type.Name].Count + 1;
-                    }
-                    else
-                    {
-                        segmentInfo.StatsByType.Add(type.Name, new HeapTypeStat() { Count = 1 });
-
+                        ulong size = type.GetSize(obj);
+                        //type.EnumerateRefsOfObject(obj, (childAddress, offsett) => { Console.WriteLine(childAddress); });
+                        this.AddToTypeToDictionary(segmentInfo.StatsByType, type.Name,size);
+                        this.AddToTypeToDictionary(returnValue.StatsByType, type.Name,size);
                     }
                 }
 
@@ -57,7 +55,20 @@ namespace kedi.engine.Controllers
 
             return returnValue;
         }
+        private void AddToTypeToDictionary(Dictionary<string, HeapTypeStat> dictionary,string typeName,ulong size)
+        {
+            if (dictionary.ContainsKey(typeName))
+            {
+                var currentItem = dictionary[typeName];
+                currentItem.Count += 1;
+                currentItem.TotalSize += size;
+            }
+            else
+            {
+                dictionary.Add(typeName, new HeapTypeStat() { Count = 1,TotalSize=size });
+            }
 
+        }
         private string GetSegmentType(ClrSegment segment)
         {
             if (segment.IsEphemeral)
@@ -71,5 +82,6 @@ namespace kedi.engine.Controllers
     public class HeapTypeStat
     {
         public int Count { get; set; }
+        public ulong TotalSize { get; set; }
     }
 }
