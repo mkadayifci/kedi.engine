@@ -3,6 +3,7 @@ using Microsoft.Diagnostics.Runtime;
 using System.Collections.Generic;
 using System.IO;
 using System.Web.Http;
+using static System.Diagnostics.DebuggableAttribute;
 
 namespace kedi.engine.Controllers
 {
@@ -39,7 +40,10 @@ namespace kedi.engine.Controllers
 
         //    return content;
         //}
-
+        private bool IsInDebug(DebuggingModes debugMode)
+        {
+            return (debugMode & DebuggingModes.Default) == DebuggingModes.Default;
+        }
         [HttpGet]
         [Route("api/modules/{sessionId}")]
         public List<dynamic> Get([FromUri]string sessionId)
@@ -87,12 +91,14 @@ namespace kedi.engine.Controllers
                  new
                  {
                      module.Name,
+                     Types = new List<dynamic>(),
                      AppDomains = new List<dynamic>(),
-                     FullPath=module.FileName,
-                     FileName= System.IO.Path.GetFileName(module.FileName),
+                     FullPath = module.FileName,
+                     FileName = Path.GetFileName(module.FileName),
                      module.Pdb,
                      module.AssemblyName,
-                     module.DebuggingMode
+                     module.DebuggingMode,
+                     IsInDebugMode = IsInDebug(module.DebuggingMode)
                  };
 
                 foreach (var appDomain in module.AppDomains)
@@ -103,10 +109,13 @@ namespace kedi.engine.Controllers
                         appDomain.Name
                     });
                 }
+
+                    
+          
                 returnValue.Add(currentModule);
 
 
-                
+
                 //var bytes1 = ReadMemory(runtime.DataTarget, 960, module.ImageBase);
                 //var bytes2 = ReadMemory(runtime.DataTarget, module.MetadataLength, module.MetadataAddress);
                 //var bytes = new byte[bytes1.Length + bytes2.Length];

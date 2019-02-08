@@ -13,6 +13,56 @@ namespace kedi.engine.Controllers
     {
         IAnalyzeOrchestrator analyzeOrchestrator = ContainerManager.Container.Resolve<IAnalyzeOrchestrator>();
 
+        private  string GetThreadModel(ClrThread thread)
+        {
+            if (thread.IsMTA)
+            {
+                return "MTA";
+            }
+            else if (thread.IsSTA)
+            {
+                return "STA";
+            }
+
+            return "Unknown";
+        }
+
+        private string GetSpecialRole(ClrThread thread)
+        {
+            if (thread.IsGC)
+            {
+                return "GC Mode";
+            }
+            else if (thread.IsFinalizer)
+            {
+                return "Finalizer";
+            }
+            else if (thread.IsThreadpoolCompletionPort)
+            {
+                return "IO Completion";
+            }
+            else if (thread.IsThreadpoolGate)
+            {
+                return "Threadpool Gate";
+            }
+            else if (thread.IsThreadpoolTimer)
+            {
+                return "Threadpool Timer";
+            }
+            else if (thread.IsThreadpoolWait)
+            {
+                return "Threadpool Wait";
+            }
+            else if (thread.IsThreadpoolWorker)
+            {
+                return "Threadpool Worker";
+            }
+
+
+            return string.Empty;
+        }
+
+
         [HttpGet]
         [Route("api/threads/{sessionId}")]
         public dynamic GetThreads([FromUri]string sessionId)
@@ -25,7 +75,10 @@ namespace kedi.engine.Controllers
                 dynamic threadObject = new ExpandoObject();
 
                 threadObject.OSThreadId = thread.OSThreadId;
+
                 threadObject.ManagedThreadId = thread.ManagedThreadId;
+                threadObject.ThreadingModel = this.GetThreadModel(thread);
+                threadObject.SpecialRole = this.GetSpecialRole(thread);
                 threadObject.IsFinalizer = thread.IsFinalizer;
                 threadObject.IsGC = thread.IsGC;
                 threadObject.Address = thread.Address;
