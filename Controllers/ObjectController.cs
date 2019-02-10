@@ -44,7 +44,7 @@ namespace kedi.engine.Controllers
                 type.MethodTable,
                 ElementType= type.ElementType.ToString(),
                 TypeName = type.Name,
-                ObjectValue = type.GetValue(objPtr),
+                //ObjectValue = type.GetValue(objPtr),
                 Members = new List<dynamic>(),
                 Values = new List<DateTime>(),
                 Module=type.Module.Name

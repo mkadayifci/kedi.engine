@@ -35,12 +35,13 @@ namespace kedi.engine.MemoryRepresentation
                 if (!memoryObject.ReferencedByObjectsPointers.Contains(parentObject.Address))
                     memoryObject.ReferencedByObjectsPointers.Add(parentObject.Address);
             }
-
+            
             memoryMap.Dictionary.Add(objectPointer, memoryObject);
 
             ClrType currentType = heap.GetObjectType(objectPointer);
             if (currentType != null)
             {
+                
                 if (currentType.HasSimpleValue)
                 {
                     memoryObject.Value = currentType.GetValue(objectPointer);

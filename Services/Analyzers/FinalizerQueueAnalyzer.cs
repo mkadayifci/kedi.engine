@@ -1,7 +1,6 @@
 ﻿using kedi.engine.Services.Analyze;
 using Microsoft.Diagnostics.Runtime;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace kedi.engine.Services.Analyzers
 {
@@ -11,10 +10,22 @@ namespace kedi.engine.Services.Analyzers
 
         public dynamic Analyze(string sessionId)
         {
+
             var returnValue = new List<dynamic>();
             ClrRuntime runtime = analyzeOrchestrator.GetRuntimeBySessionId(sessionId);
+            
+            
+            return new
+            {
+                FinalizableObjects = this.GetFinalizeObjects(runtime, runtime.Heap.EnumerateFinalizableObjectAddresses()),
+                ObjectsInFinalizerQueue = this.GetFinalizeObjects(runtime, runtime.EnumerateFinalizerQueueObjectAddresses())
+            };
+        }
 
-            foreach (var objectAddressInQueue in runtime.Heap.EnumerateFinalizableObjectAddresses())
+        private dynamic GetFinalizeObjects(ClrRuntime runtime, IEnumerable<ulong> objectAdresses)
+        {
+            var returnValue = new List<dynamic>();
+            foreach (var objectAddressInQueue in objectAdresses)
             {
                 var typeOfObject = runtime.Heap.GetObjectType(objectAddressInQueue);
                 if (typeOfObject != null)
@@ -24,10 +35,6 @@ namespace kedi.engine.Services.Analyzers
                         ObjectAddress = objectAddressInQueue,
                         TypeName = typeOfObject.Name
                     });
-                }
-                else
-                {
-                    Debug.Assert(false);
                 }
             }
             return returnValue;
