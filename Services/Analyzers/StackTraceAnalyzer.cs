@@ -25,6 +25,7 @@ namespace kedi.engine.Services.Analyzers
             foreach (var thread in runtime.Threads)
             {
                 var threadStackKey = string.Empty;
+
                 foreach (ClrStackFrame frame in thread.StackTrace)
                 {
                     threadStackKey += frame.DisplayString ?? string.Empty;
@@ -40,8 +41,9 @@ namespace kedi.engine.Services.Analyzers
 
                 returnValue[threadStackKey].Add(thread.OSThreadId);
             }
-
-            return new { };
+            return returnValue.Values.
+                                Where(item => item.Count > 1).
+                                ToList();
         }
 
         public List<StackAnalyzeObject> GetMethodHitData(ClrRuntime runtime)

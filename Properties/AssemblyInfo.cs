@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("kedi.engine")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("kedi-analyzer")]
+[assembly: AssemblyDescription("Kedi analyzer is a memory profiler for .NET applications")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("kedi.engine")]
+[assembly: AssemblyCompany("kedi")]
+[assembly: AssemblyProduct("kedi-analyzer")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

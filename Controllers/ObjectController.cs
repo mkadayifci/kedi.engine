@@ -37,6 +37,7 @@ namespace kedi.engine.Controllers
                 clrObject.IsArray,
                 clrObject.IsBoxed,
                 clrObject.IsNull,
+               
                 memoryObjectForCurrent?.ReferencedByObjectsPointers,
                 memoryObjectForCurrent?.ReferencedObjectsPointers,
                 BaseTypeName =type.BaseType?.Name,
@@ -69,6 +70,7 @@ namespace kedi.engine.Controllers
                     field.IsObjectReference ,
                     field.HasSimpleValue,
                     field.Offset,
+                    field.IsPublic,
                     FieldType = field.Type.Name,
                     Address = field.GetAddress(objPtr),
                     Value = field.GetValue(objPtr)
