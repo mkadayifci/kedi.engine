@@ -10,6 +10,7 @@ namespace kedi.engine.Services.Analyze
 {
     public class AnalyzeOrchestrator : IAnalyzeOrchestrator
     {
+        private static object analyzeOrchestratorSync = new object();
         ISessionManager sessionManager = ContainerManager.Container.Resolve<ISessionManager>();
 
         public Dictionary<string, ClrRuntime> activeRuntimes = new Dictionary<string, ClrRuntime>();
@@ -27,24 +28,28 @@ namespace kedi.engine.Services.Analyze
 
         public ClrRuntime GetRuntimeBySessionId(string sessionId)
         {
-            if (!activeRuntimes.ContainsKey(sessionId))
+
+            lock (AnalyzeOrchestrator.analyzeOrchestratorSync)
             {
-                Session session = sessionManager.GetById(sessionId);
-                ClrRuntime createdRuntime = CreateRuntime(ConfigurationManager.AppSettings["DataPath"] + "\\" + session.Identifier);
+                if (!activeRuntimes.ContainsKey(sessionId))
+                {
+                    Session session = sessionManager.GetById(sessionId);
+                    ClrRuntime createdRuntime = CreateRuntime(ConfigurationManager.AppSettings["DataPath"] + "\\" + session.Identifier);
 
 
-                //var debuggerInterface = (IDebugClient5)createdRuntime.DataTarget.DebuggerInterface;
-                //var debuggerControl = (IDebugControl5)createdRuntime.DataTarget.DebuggerInterface;
-                //debuggerControl.AddExtension(@"C:\DumpAnalyze\x64\SOS.dll", 0, out ulong handle);
+                    //var debuggerInterface = (IDebugClient5)createdRuntime.DataTarget.DebuggerInterface;
+                    //var debuggerControl = (IDebugControl5)createdRuntime.DataTarget.DebuggerInterface;
+                    //debuggerControl.AddExtension(@"C:\DumpAnalyze\x64\SOS.dll", 0, out ulong handle);
 
-                ////debuggerControl.AddExtension(@"C:\DumpAnalyze\x64\mscordacwks_amd64_amd64_4.0.30319.34209.dll", 0, out ulong handle2);
+                    ////debuggerControl.AddExtension(@"C:\DumpAnalyze\x64\mscordacwks_amd64_amd64_4.0.30319.34209.dll", 0, out ulong handle2);
 
-                //var outputCallbacks = new OutputCallbacks();
-                //debuggerInterface.SetOutputCallbacksWide(outputCallbacks);
+                    //var outputCallbacks = new OutputCallbacks();
+                    //debuggerInterface.SetOutputCallbacksWide(outputCallbacks);
 
-                activeRuntimes.Add(sessionId, createdRuntime);
+                    activeRuntimes.Add(sessionId, createdRuntime);
+                }
+                return activeRuntimes[sessionId];
             }
-            return activeRuntimes[sessionId];
         }
 
 
