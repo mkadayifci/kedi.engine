@@ -35,7 +35,6 @@ namespace kedi.engine.Controllers.Analyzers
             };
             foreach(var item in runtime.ThreadPool.EnumerateManagedWorkItems())
             {
-
             }
 
             foreach (var item in runtime.ThreadPool.EnumerateNativeWorkItems())

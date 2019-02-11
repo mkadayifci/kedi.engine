@@ -2,8 +2,9 @@
 using Microsoft.Diagnostics.Runtime;
 using System;
 using System.Collections.Generic;
-using System.Web.Http;
+using System.Dynamic;
 using System.Linq;
+using System.Web.Http;
 
 namespace kedi.engine.Controllers
 {
@@ -16,47 +17,95 @@ namespace kedi.engine.Controllers
         public dynamic Get([FromUri]string sessionId)
         {
             ClrRuntime runtime = analyzeOrchestrator.GetRuntimeBySessionId(sessionId);
-            var returnValue = new
-            {
-                Heaps = new List<dynamic>(),
-                StatsByType = new Dictionary<string, HeapTypeStat>(),
-                runtime.Heap.TotalHeapSize
-            };
+            dynamic returnValue = new ExpandoObject();
+
+            returnValue.StatsByType = new Dictionary<string, HeapTypeStat>();
+            returnValue.StatsByTypeGen0 = new Dictionary<string, HeapTypeStat>();
+            returnValue.StatsByTypeGen1 = new Dictionary<string, HeapTypeStat>();
+            returnValue.StatsByTypeGen2 = new Dictionary<string, HeapTypeStat>();
+            returnValue.StatsByTypeGen3 = new Dictionary<string, HeapTypeStat>();
+            returnValue.TotalHeapSize = runtime.Heap.TotalHeapSize;
+            returnValue.Gen0Length = ulong.MinValue;
+            returnValue.Gen1Length = ulong.MinValue;
+            returnValue.Gen2Length = ulong.MinValue;
+            returnValue.LOHLength = ulong.MinValue;
 
             foreach (ClrSegment seg in runtime.Heap.Segments)
             {
-                var segmentInfo = new
+                returnValue.Gen0Length += seg.Gen0Length;
+                returnValue.Gen1Length += seg.Gen1Length;
+                if (seg.IsLarge)
                 {
-                    HeapSegmentType = this.GetSegmentType(seg),
-                    seg.ProcessorAffinity,
-                    seg.Gen0Length,
-                    seg.Gen1Length,
-                    seg.Gen2Length,
-                    StatsByType = new Dictionary<string, HeapTypeStat>(),
-                };
+                    returnValue.LOHLength += seg.Gen2Length;
+
+                }
+                else
+                {
+                    returnValue.Gen2Length += seg.Gen2Length;
+
+                }
+
 
                 for (ulong obj = seg.FirstObject; obj != 0; obj = seg.NextObject(obj))
                 {
                     // This gets the type of the object.
                     ClrType type = runtime.Heap.GetObjectType(obj);
+                    var objectsGeneration = seg.GetGeneration(obj);
+
                     if (type != null)
                     {
                         ulong size = type.GetSize(obj);
                         //type.EnumerateRefsOfObject(obj, (childAddress, offsett) => { Console.WriteLine(childAddress); });
-                        this.AddToTypeToDictionary(segmentInfo.StatsByType, type.Name,size);
-                        this.AddToTypeToDictionary(returnValue.StatsByType, type.Name,size);
+
+                        this.AddToTypeToDictionary(returnValue.StatsByType, type.Name, size);
+
+                        switch (objectsGeneration)
+                        {
+                            case 0:
+                                this.AddToTypeToDictionary(returnValue.StatsByTypeGen0, type.Name, size);
+                                break;
+                            case 1:
+                                this.AddToTypeToDictionary(returnValue.StatsByTypeGen1, type.Name, size);
+                                break;
+                            case 2:
+                                if (seg.IsLarge)
+                                {
+                                    this.AddToTypeToDictionary(returnValue.StatsByTypeGen3, type.Name, size);
+                                }
+                                else
+                                {
+                                    this.AddToTypeToDictionary(returnValue.StatsByTypeGen2, type.Name, size);
+                                }
+                                break;
+                        }
                     }
                 }
 
-                
-                returnValue.Heaps.Add(segmentInfo);
-
-
             }
+
+  
+
+            this.FillPercentageData(returnValue.StatsByType);
+            this.FillPercentageData(returnValue.StatsByTypeGen0);
+            this.FillPercentageData(returnValue.StatsByTypeGen1);
+            this.FillPercentageData(returnValue.StatsByTypeGen2);
+            this.FillPercentageData(returnValue.StatsByTypeGen3);
 
             return returnValue;
         }
-        private void AddToTypeToDictionary(Dictionary<string, HeapTypeStat> dictionary,string typeName,ulong size)
+
+
+        private void FillPercentageData(Dictionary<string, HeapTypeStat> dictionary)
+        {
+            var totalCount = dictionary.Values.Sum(item => item.Count);
+
+            foreach (var item in dictionary.Values)
+            {
+                item.Percentage = Math.Round(((double)item.Count / (double)totalCount) * 100, 3);
+            }
+        }
+
+        private void AddToTypeToDictionary(Dictionary<string, HeapTypeStat> dictionary, string typeName, ulong size)
         {
             if (dictionary.ContainsKey(typeName))
             {
@@ -66,23 +115,15 @@ namespace kedi.engine.Controllers
             }
             else
             {
-                dictionary.Add(typeName, new HeapTypeStat() { Count = 1,TotalSize=size });
+                dictionary.Add(typeName, new HeapTypeStat() { Count = 1, TotalSize = size });
             }
 
-        }
-        private string GetSegmentType(ClrSegment segment)
-        {
-            if (segment.IsEphemeral)
-                return "Ephemeral";
-            else if (segment.IsLarge)
-                return "Large";
-            else
-                return "Gen2";
         }
     }
     public class HeapTypeStat
     {
         public int Count { get; set; }
+        public double Percentage { get; set; }
         public ulong TotalSize { get; set; }
     }
 }
