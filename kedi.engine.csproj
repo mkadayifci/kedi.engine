@@ -153,6 +153,7 @@
     <Compile Include="Controllers\Analyzers\ExceptionAnalyzerController.cs" />
     <Compile Include="Controllers\Analyzers\FinalizerQueueAnalyzerController.cs" />
     <Compile Include="Controllers\Analyzers\ObjectMemoryImpactAnalyzerController.cs" />
+    <Compile Include="Controllers\Analyzers\PinnedObjectsAnalyzerController.cs" />
     <Compile Include="Controllers\Analyzers\RootAnalyzerController.cs" />
     <Compile Include="Controllers\Analyzers\StackTraceAnalyzerController.cs" />
     <Compile Include="Controllers\Analyzers\ThreadPoolAnalyzerController.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuntimeBoss.cs" />
     <Compile Include="Services\Analyzers\FinalizerQueueAnalyzer.cs" />
+    <Compile Include="Services\Analyzers\PinnedObjectAnalyzer.cs" />
     <Compile Include="Services\Analyzers\StackTraceAnalyzer.cs" />
     <Compile Include="Services\Analyzers\StackAnalyzeObject.cs" />
     <Compile Include="Services\Analyze\AnalyzeOrchestrator.cs" />
