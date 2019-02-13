@@ -160,6 +160,7 @@
     <Compile Include="Controllers\MemoryController.cs" />
     <Compile Include="Controllers\ModulesController.cs" />
     <Compile Include="Controllers\ObjectController.cs" />
+    <Compile Include="Controllers\PlayZoneController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\SummaryController.cs" />
     <Compile Include="Controllers\ThreadsController.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Services\Analyzers\StackAnalyzeObject.cs" />
     <Compile Include="Services\Analyze\AnalyzeOrchestrator.cs" />
     <Compile Include="Services\Analyze\IAnalyzeOrchestrator.cs" />
+    <Compile Include="Services\PlayZone.cs" />
     <Compile Include="Services\Sessions\ISessionManager.cs" />
     <Compile Include="Services\Sessions\Session.cs" />
     <Compile Include="Services\Sessions\SessionManager.cs" />
