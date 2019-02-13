@@ -1,7 +1,4 @@
-﻿using kedi.engine.Services;
-using kedi.engine.Services.Analyze;
-using kedi.engine.Services.Analyzers;
-using Microsoft.Diagnostics.Runtime;
+﻿using kedi.engine.Services.Analyzers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,18 +8,18 @@ using System.Web.Http;
 
 namespace kedi.engine.Controllers.Analyzers
 {
-    public class ObjectMemoryImpactAnalyzerController : ApiController
+    public class BlockingObjectsAnalyzerController : ApiController
     {
-        ObjectMemoryImpactAnalyzer analyzer = new ObjectMemoryImpactAnalyzer();
+        BlockingObjectsAnalyzer analyzer = new BlockingObjectsAnalyzer();
 
-        [Route("api/analyzers/exceptiogn-analyzer/{sessionId}")]
+        [Route("api/analyzers/blocking-objects-analyzer/{sessionId}")]
         [HttpGet]
         public IHttpActionResult Get([FromUri]string sessionId)
         {
             return Ok(analyzer.Analyze(sessionId));
         }
-
     }
+
 }
 
 

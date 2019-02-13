@@ -12,12 +12,21 @@ namespace kedi.engine.Services.Sessions
         }
         public SessionManager()
         {
+            //activeSessions.Add(
+            //                    "gh463d1\\ScheduledService.dmp",
+            //                    new Session(
+            //                                "gh463d1\\ScheduledService.dmp",
+            //                                "30230bf96a884830a0b96805cf173717",
+            //                                "ScheduledService.dmp"));
             activeSessions.Add(
-                                "gh463d1\\ScheduledService.dmp",
+                                "gh463d1\\ScheduledService_ConsoleApp.dmp",
                                 new Session(
-                                            "gh463d1\\ScheduledService.dmp",
+                                            "gh463d1\\ScheduledService_ConsoleApp2.dmp",
                                             "30230bf96a884830a0b96805cf173717",
-                                            "ScheduledService.dmp"));
+                                            "ScheduledService_ConsoleApp2.dmp"));
+
+
+
 
         }
 

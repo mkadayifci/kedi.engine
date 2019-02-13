@@ -1,10 +1,4 @@
 ﻿using kedi.engine.Services;
-using kedi.engine.Services.Analyzers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace kedi.engine.Controllers
@@ -22,10 +16,9 @@ namespace kedi.engine.Controllers
 
         [Route("api/play-zone/results/{sessionId}")]
         [HttpGet]
-        public IHttpActionResult GetResults([FromUri]string sessionId, [FromUri]string queryValue="", [FromUri]string[] type=default(string[]))
+        public IHttpActionResult GetResults([FromUri]string sessionId, [FromUri]string queryValue = "", [FromUri]string[] type = default(string[]))
         {
-            var result = playZone.GetResults(sessionId,type, queryValue);
-            return Ok(result);
+            return Ok(playZone.GetResults(sessionId, type, queryValue));
         }
 
     }

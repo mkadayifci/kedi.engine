@@ -18,10 +18,13 @@ namespace kedi.engine.Services.Analyze
 
         public MemoryMap GetMemoryMapBySessionId(string sessionId)
         {
-            if (!activeMemoryMaps.ContainsKey(sessionId))
+            lock (AnalyzeOrchestrator.analyzeOrchestratorSync)
             {
-                var createdMemoryMap = (new MemoryMapGenerator()).GenerateMemoryMap(this.GetRuntimeBySessionId(sessionId));
-                activeMemoryMaps.Add(sessionId, createdMemoryMap);
+                if (!activeMemoryMaps.ContainsKey(sessionId))
+                {
+                    var createdMemoryMap = (new MemoryMapGenerator()).GenerateMemoryMap(this.GetRuntimeBySessionId(sessionId));
+                    activeMemoryMaps.Add(sessionId, createdMemoryMap);
+                }
             }
             return activeMemoryMaps[sessionId];
         }
@@ -62,10 +65,13 @@ namespace kedi.engine.Services.Analyze
                 throw new Exception(string.Format("Architecture mismatch:  Process is {0} but target is {1}", Environment.Is64BitProcess ? "64 bit" : "32 bit", isTarget64Bit ? "64 bit" : "32 bit"));
 
             ClrInfo version = dataTarget.ClrVersions[0];
-            string dac = dataTarget.SymbolLocator.FindBinary(version.DacInfo);
 
+            string dac = dataTarget.SymbolLocator.FindBinary(version.DacInfo, false);
+            
             if (dac == null || !File.Exists(dac))
+            {
                 throw new FileNotFoundException("Could not find the specified dac.", dac);
+            }
 
             return version.CreateRuntime(dac);
         }

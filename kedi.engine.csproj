@@ -149,12 +149,12 @@
     <Compile Include="ConsoleSimulation\SignalRHub.cs" />
     <Compile Include="ConsoleSimulation\OutputCallbacks.cs" />
     <Compile Include="ContainerManager.cs" />
+    <Compile Include="Controllers\Analyzers\BlockingObjectsAnalyzerController.cs" />
     <Compile Include="Controllers\Analyzers\DuplicateStringsAnalyzerController.cs" />
     <Compile Include="Controllers\Analyzers\ExceptionAnalyzerController.cs" />
     <Compile Include="Controllers\Analyzers\FinalizerQueueAnalyzerController.cs" />
     <Compile Include="Controllers\Analyzers\ObjectMemoryImpactAnalyzerController.cs" />
     <Compile Include="Controllers\Analyzers\PinnedObjectsAnalyzerController.cs" />
-    <Compile Include="Controllers\Analyzers\RootAnalyzerController.cs" />
     <Compile Include="Controllers\Analyzers\StackTraceAnalyzerController.cs" />
     <Compile Include="Controllers\Analyzers\ThreadPoolAnalyzerController.cs" />
     <Compile Include="Controllers\MemoryController.cs" />
@@ -170,16 +170,26 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuntimeBoss.cs" />
+    <Compile Include="Services\Analyzers\BlockingObjectsAnalyzer.cs" />
     <Compile Include="Services\Analyzers\FinalizerQueueAnalyzer.cs" />
     <Compile Include="Services\Analyzers\PinnedObjectAnalyzer.cs" />
     <Compile Include="Services\Analyzers\StackTraceAnalyzer.cs" />
     <Compile Include="Services\Analyzers\StackAnalyzeObject.cs" />
+    <Compile Include="Services\Analyzers\ThreadPoolAnalyzer.cs" />
     <Compile Include="Services\Analyze\AnalyzeOrchestrator.cs" />
     <Compile Include="Services\Analyze\IAnalyzeOrchestrator.cs" />
+    <Compile Include="Services\Analyzers\DuplicateStringsAnalyzer.cs" />
+    <Compile Include="Services\Analyzers\ExceptionAnalyzer.cs" />
+    <Compile Include="Services\Analyzers\ObjectMemoryImpactAnalyzer.cs" />
+    <Compile Include="Services\MemoryService.cs" />
+    <Compile Include="Services\ModulesService.cs" />
+    <Compile Include="Services\ObjectService.cs" />
     <Compile Include="Services\PlayZone.cs" />
     <Compile Include="Services\Sessions\ISessionManager.cs" />
     <Compile Include="Services\Sessions\Session.cs" />
     <Compile Include="Services\Sessions\SessionManager.cs" />
+    <Compile Include="Services\SummaryService.cs" />
+    <Compile Include="Services\ThreadService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

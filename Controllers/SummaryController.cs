@@ -1,54 +1,17 @@
-﻿using kedi.engine.Services.Analyze;
-using kedi.engine.Services.Sessions;
-using Microsoft.Diagnostics.Runtime;
-using System.Collections.Generic;
+﻿using kedi.engine.Services;
 using System.Web.Http;
 
 namespace kedi.engine.Controllers
 {
     public class SummaryController : ApiController
     {
-        IAnalyzeOrchestrator analyzeOrchestrator = ContainerManager.Container.Resolve<IAnalyzeOrchestrator>();
-        ISessionManager sessionManager = ContainerManager.Container.Resolve<ISessionManager>();
+        SummaryService summaryService = new SummaryService();
 
-        [HttpGet]
         [Route("api/summary/{sessionId}")]
+        [HttpGet]
         public IHttpActionResult Get([FromUri]string sessionId)
         {
-            ClrRuntime clrRuntime = analyzeOrchestrator.GetRuntimeBySessionId(sessionId);
-
-            dynamic returnValue = new
-            {
-                SourceName= sessionManager.GetById(sessionId).SourceName,
-                Version = clrRuntime.ClrInfo.Version.ToString(),
-                Flavor = clrRuntime.ClrInfo.Flavor.ToString(),
-
-                DacInfo = clrRuntime.ClrInfo.DacInfo.PlatformAgnosticFileName,
-                TargetArchitecture = clrRuntime.ClrInfo.DacInfo.TargetArchitecture.ToString(),
-
-                AppDomains = new List<dynamic>(),
-                Is64Bit = clrRuntime?.DataTarget?.PointerSize == 8,
-                GCMode= clrRuntime.ServerGC?"ServerGC":"WorkstationGC",
-                ThreadCount= clrRuntime.Threads.Count,
-                clrRuntime.HeapCount,
-                clrRuntime.DataTarget?.DataReader?.IsMinidump
-
-
-            };
-
-            foreach (var appDomain in clrRuntime.AppDomains)
-            {
-                returnValue.AppDomains.Add(new
-                {
-                    appDomain.Name,
-                    appDomain.ConfigurationFile
-                });
-            }
-
-            //clrRuntime.AppDomains
-            //clrRuntime.Modules
-            return Ok<dynamic>(returnValue);
+            return Ok(summaryService.GetSummary(sessionId));
         }
     }
 }
-
