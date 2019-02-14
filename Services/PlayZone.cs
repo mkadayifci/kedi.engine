@@ -86,9 +86,9 @@ namespace kedi.engine.Services
                 };
             }
 
-            foreach (var item in memoryObject.ReferencedObjectsPointers)
+            foreach (var item in memoryObject.ReferencedObjects)
             {
-                var innerSearchResult = this.IsObjectContainsValue(memoryMap, item, searchValue,depth+1);
+                var innerSearchResult = this.IsObjectContainsValue(memoryMap, item.Address, searchValue,depth+1);
 
                 if (innerSearchResult.IsSuccess)
                 {

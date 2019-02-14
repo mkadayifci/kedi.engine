@@ -11,8 +11,8 @@ namespace kedi.engine.MemoryRepresentation
         public ulong Address { get; set; }
         public object Value { get; set; }
         public string TypeName { get; set; }
-        public List<ulong> ReferencedObjectsPointers = new List<ulong>();
-        public List<ulong> ReferencedByObjectsPointers = new List<ulong>();
+        public List<RelatedMemoryObject> ReferencedObjects = new List<RelatedMemoryObject>();
+        public List<RelatedMemoryObject> ReferencedByObjects = new List<RelatedMemoryObject>();
         public ulong Size { get; set; }
 
 
