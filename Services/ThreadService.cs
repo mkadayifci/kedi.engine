@@ -35,24 +35,13 @@ namespace kedi.engine.Services
                 threadObject.CurrentExceptionAddress = thread.CurrentException?.Address;
                 threadObject.CurrentExceptionType = thread.CurrentException?.Type.Name;
                 threadObject.LockCount = thread.LockCount;
-                threadObject.StackTrace = new List<dynamic>();
+                threadObject.StackTrace = GetStackTrace(thread);
                 threadObject.StackObjects = new List<dynamic>();
 
                 SetBasicThreadInfo(clrRuntime, threadObject, thread.Teb);
 
-                foreach (ClrStackFrame frame in thread.StackTrace)
-                {
-                    string displayString =
-                        frame.Method != null && frame.DisplayString != frame.Method.ToString() ?
-                                        $"[{frame.DisplayString}] {frame.Method.ToString()}" :
-                                        frame.DisplayString;
+                
 
-                    threadObject.StackTrace.Add(new
-                    {
-                        DisplayString = displayString,
-                        frame.ModuleName,
-                    });
-                }
                 var addedObjectAddresses = new List<ulong>();
                 foreach (var stackObj in thread.EnumerateStackObjects())
                 {
@@ -74,6 +63,26 @@ namespace kedi.engine.Services
                 threads.Add(threadObject);
             }
             return threads;
+        }
+
+        public List<dynamic> GetStackTrace(ClrThread thread)
+        {
+            List<dynamic> returnValue = new List<dynamic>();
+
+            foreach (ClrStackFrame frame in thread.StackTrace)
+            {
+                string displayString =
+                    frame.Method != null && frame.DisplayString != frame.Method.ToString() ?
+                                    $"[{frame.DisplayString}] {frame.Method.ToString()}" :
+                                    frame.DisplayString;
+
+                returnValue.Add(new
+                {
+                    DisplayString = displayString,
+                    frame.ModuleName,
+                });
+            }
+            return returnValue;
         }
 
         private string GetThreadModel(ClrThread thread)

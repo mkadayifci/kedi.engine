@@ -1,34 +1,39 @@
 ﻿using kedi.engine.Services.Analyze;
 using Microsoft.Diagnostics.Runtime;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace kedi.engine.Services.Analyzers
 {
     public class BlockingObjectsAnalyzer
     {
         IAnalyzeOrchestrator analyzeOrchestrator = ContainerManager.Container.Resolve<IAnalyzeOrchestrator>();
+        ThreadService threadService = new ThreadService();
 
         public dynamic Analyze(string sessionId)
         {
             List<dynamic> returnValue = new List<dynamic>();
             ClrRuntime runtime = analyzeOrchestrator.GetRuntimeBySessionId(sessionId);
 
-            foreach(var blockingObject in runtime.Heap.EnumerateBlockingObjects())
+            foreach (var blockingObject in runtime.Heap.EnumerateBlockingObjects())
             {
-                returnValue.Add(new {
-                    ObjectAddress = blockingObject.Object ,
+                returnValue.Add(new
+                {
+                    ObjectAddress = blockingObject.Object,
                     blockingObject.Reason,
                     blockingObject.RecursionCount,
-                    Locked=blockingObject.Taken,
+                    Locked = blockingObject.Taken,
                     OwnerThreadCount = blockingObject.Owners.Count,
-                    WaiterThreadCount = blockingObject.Waiters.Count
+                    WaiterThreadCount = blockingObject.Waiters.Count,
+                    OwnerThreads = GetThreadStacksInfo(blockingObject.Owners),
+                    WaiterThreads = GetThreadStacksInfo(blockingObject.Waiters)
+
                 });
 
             }
+
+
+
             //foreach (var handle in runtime.EnumerateHandles())
             //{
             //    if (handle.IsPinned)
@@ -41,6 +46,24 @@ namespace kedi.engine.Services.Analyzers
             //        });
             //    }
             //}
+            return returnValue;
+        }
+
+        private List<dynamic> GetThreadStacksInfo(IList<ClrThread> threads)
+        {
+            var returnValue = new List<dynamic>();
+
+            foreach (var thread in threads)
+            {
+                if (thread == null)
+                    continue;
+
+                returnValue.Add(new
+                {
+                    OsThreadId = thread.OSThreadId,
+                    StackTrace = threadService.GetStackTrace(thread)
+                });
+            }
             return returnValue;
         }
     }
