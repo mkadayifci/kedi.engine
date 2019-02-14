@@ -19,7 +19,14 @@ namespace kedi.engine.Services.Analyzers
 
             foreach(var blockingObject in runtime.Heap.EnumerateBlockingObjects())
             {
-                returnValue.Add(new { ObjectAddress = blockingObject.Object });
+                returnValue.Add(new {
+                    ObjectAddress = blockingObject.Object ,
+                    blockingObject.Reason,
+                    blockingObject.RecursionCount,
+                    Locked=blockingObject.Taken,
+                    OwnerThreadCount = blockingObject.Owners.Count,
+                    WaiterThreadCount = blockingObject.Waiters.Count
+                });
 
             }
             //foreach (var handle in runtime.EnumerateHandles())
