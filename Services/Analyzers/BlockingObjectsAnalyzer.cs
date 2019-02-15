@@ -32,20 +32,6 @@ namespace kedi.engine.Services.Analyzers
 
             }
 
-
-
-            //foreach (var handle in runtime.EnumerateHandles())
-            //{
-            //    if (handle.IsPinned)
-            //    {
-            //        returnValue.Add(new
-            //        {
-            //            ObjectAddress = handle.Object,
-            //            TypeName = handle.Type.Name,
-            //            handle.HandleType
-            //        });
-            //    }
-            //}
             return returnValue;
         }
 

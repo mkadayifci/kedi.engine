@@ -1,8 +1,11 @@
 ﻿using Microsoft.Owin;
+using Microsoft.Owin.FileSystems;
+using Microsoft.Owin.StaticFiles;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Owin;
+using System.IO;
 using System.Net.Http.Formatting;
 using System.Web.Http;
 
@@ -32,11 +35,18 @@ namespace kedi.engine
                           defaults: new { id = RouteParameter.Optional }
                       );
 
+
+
             app
             .UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll)
             .MapSignalR()
-            .UseWebApi(config);
-
+            .UseWebApi(config)
+            .UseDefaultFiles()
+            .UseStaticFiles(new StaticFileOptions()
+            {
+                RequestPath = new PathString(""),
+                FileSystem = new PhysicalFileSystem(@".\webapp")
+            });
         }
 
     }

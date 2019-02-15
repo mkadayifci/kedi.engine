@@ -19,7 +19,6 @@ namespace kedi.engine.Controllers.Analyzers
             return Ok(analyzer.Analyze(sessionId));
         }
     }
-
 }
 
 

@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{9882E45C-F8B1-48FA-AC71-A37EC5788080}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>kedi.engine</RootNamespace>
     <AssemblyName>Kedi Analyzer</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -27,7 +27,7 @@
     <InstallUrl>https://www.kedi-analyzer.com/publish/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationRevision>4</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -76,6 +76,9 @@
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>packages\Castle.Core.4.2.0\lib\net45\Castle.Core.dll</HintPath>
@@ -101,6 +104,9 @@
     <Reference Include="Microsoft.Owin.Diagnostics, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Owin.Diagnostics.2.1.0\lib\net40\Microsoft.Owin.Diagnostics.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Owin.FileSystems, Version=4.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Owin.FileSystems.4.0.1\lib\net45\Microsoft.Owin.FileSystems.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Owin.Host.HttpListener, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Owin.Host.HttpListener.2.1.0\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
     </Reference>
@@ -113,6 +119,9 @@
     <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Owin.StaticFiles, Version=4.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Owin.StaticFiles.4.0.1\lib\net45\Microsoft.Owin.StaticFiles.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -122,6 +131,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
@@ -138,6 +148,7 @@
     <Reference Include="System.Web.Http.Owin, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.AspNet.WebApi.Owin.5.2.7\lib\net45\System.Web.Http.Owin.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -190,6 +201,12 @@
     <Compile Include="Services\Sessions\SessionManager.cs" />
     <Compile Include="Services\SummaryService.cs" />
     <Compile Include="Services\ThreadService.cs" />
+    <Compile Include="StartForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StartForm.Designer.cs">
+      <DependentUpon>StartForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +214,40 @@
     <None Include="kedi.engine_1_TemporaryKey.pfx" />
     <None Include="kedi.engine_TemporaryKey.pfx" />
     <None Include="packages.config" />
+    <None Include="webapp\fonts\fontawesome-webfont.674f50d2.eot" />
+    <None Include="webapp\fonts\fontawesome-webfont.af7ae505.woff2" />
+    <None Include="webapp\fonts\fontawesome-webfont.b06871f2.ttf" />
+    <None Include="webapp\fonts\fontawesome-webfont.fee66e71.woff" />
+    <None Include="webapp\fonts\open-sans-latin-300.521d17bc.woff" />
+    <None Include="webapp\fonts\open-sans-latin-300.60c86674.woff2" />
+    <None Include="webapp\fonts\open-sans-latin-300italic.06bbd318.woff2" />
+    <None Include="webapp\fonts\open-sans-latin-300italic.8a648ff3.woff" />
+    <None Include="webapp\fonts\open-sans-latin-400.bf2d0783.woff" />
+    <None Include="webapp\fonts\open-sans-latin-400.cffb686d.woff2" />
+    <None Include="webapp\fonts\open-sans-latin-400italic.987032ea.woff2" />
+    <None Include="webapp\fonts\open-sans-latin-400italic.db70d0b9.woff" />
+    <None Include="webapp\fonts\open-sans-latin-600.1cd5320f.woff" />
+    <None Include="webapp\fonts\open-sans-latin-600.223a277b.woff2" />
+    <None Include="webapp\fonts\open-sans-latin-600italic.318ea1ad.woff" />
+    <None Include="webapp\fonts\open-sans-latin-600italic.4950a720.woff2" />
+    <None Include="webapp\fonts\open-sans-latin-700.623e3205.woff" />
+    <None Include="webapp\fonts\open-sans-latin-700.d08c09f2.woff2" />
+    <None Include="webapp\fonts\open-sans-latin-700italic.72e19cbb.woff" />
+    <None Include="webapp\fonts\open-sans-latin-700italic.c02f5da6.woff2" />
+    <None Include="webapp\fonts\open-sans-latin-800.aaeffaf2.woff2" />
+    <None Include="webapp\fonts\open-sans-latin-800.c6aa0c4a.woff" />
+    <None Include="webapp\fonts\open-sans-latin-800italic.6b3973ff.woff2" />
+    <None Include="webapp\fonts\open-sans-latin-800italic.79b58175.woff" />
+    <None Include="webapp\fonts\ubuntu-mono-latin-400.9937c52e.woff2" />
+    <None Include="webapp\fonts\ubuntu-mono-latin-400.fda3eddd.woff" />
+    <None Include="webapp\fonts\ubuntu-mono-latin-400italic.4cbe65be.woff2" />
+    <None Include="webapp\fonts\ubuntu-mono-latin-400italic.c2cb57e6.woff" />
+    <None Include="webapp\fonts\ubuntu-mono-latin-700.15a5b8c8.woff" />
+    <None Include="webapp\fonts\ubuntu-mono-latin-700.35243340.woff2" />
+    <None Include="webapp\fonts\ubuntu-mono-latin-700italic.123009e4.woff" />
+    <None Include="webapp\fonts\ubuntu-mono-latin-700italic.b58ee8b3.woff2" />
+    <None Include="webapp\js\app.a93daeea.js.map" />
+    <None Include="webapp\js\chunk-vendors.dcd5453f.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DumpDataFolder\" />
@@ -208,6 +259,13 @@
     <Content Include="Scripts\jquery-1.6.4.min.js" />
     <Content Include="Scripts\jquery.signalR-2.4.0.js" />
     <Content Include="Scripts\jquery.signalR-2.4.0.min.js" />
+    <Content Include="webapp\css\app.f68904d5.css" />
+    <Content Include="webapp\css\chunk-vendors.bace7cc8.css" />
+    <Content Include="webapp\favicon.ico" />
+    <Content Include="webapp\img\fontawesome-webfont.912ec66d.svg" />
+    <Content Include="webapp\index.html" />
+    <Content Include="webapp\js\app.a93daeea.js" />
+    <Content Include="webapp\js\chunk-vendors.dcd5453f.js" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
@@ -221,5 +279,13 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="StartForm.resx">
+      <DependentUpon>StartForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(ProjectDir)\webapp\* $(TargetDir)\webapp\* /s /i /y</PostBuildEvent>
+  </PropertyGroup>
 </Project>
