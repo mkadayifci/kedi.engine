@@ -20,6 +20,10 @@ namespace kedi.engine
 
         private void StartForm_Load(object sender, EventArgs e)
         {
+            this.Text = Properties.LocalSettings.Default["UserToken"].ToString();
+            Properties.LocalSettings.Default["UserToken"] = "Saved";
+            Properties.LocalSettings.Default.Save();
+
             infoLabel.Text = $"kedi - anlayzer runs in web browser window.You can manualy browse {this.baseUrl} or just click the button below";
         }
     }

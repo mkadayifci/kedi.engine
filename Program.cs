@@ -10,6 +10,7 @@ namespace kedi.engine
         const string url = "http://localhost:5334";
         static void Main(string[] args)
         {
+
             RegisterDI();
             
             using (WebApp.Start<Startup>(url))
