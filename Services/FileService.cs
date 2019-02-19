@@ -9,26 +9,87 @@ namespace kedi.engine.Services
 {
     public class FileService
     {
+        const string THIS_PC = "[ThisPC]";
+        private string ConvertSpecialFolder(string path)
+        {
+
+            switch (path)
+            {
+                case "[Desktop]":
+                    return Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                case "~":
+                    return Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                case "[Documents]":
+                    return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                default:
+                    return path;
+            }
+        }
+
         public dynamic GetList(string path)
         {
             List<dynamic> returnValue = new List<dynamic>();
 
-            if (path == "~")
+
+            path = this.ConvertSpecialFolder(path);
+            if (path == FileService.THIS_PC)
             {
-                path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                AddDriverItems(returnValue);
+            }
+            else
+            {
+                AddDirectoryItems(path, returnValue);
+                AddFileItems(path, returnValue);
             }
 
-            foreach (var folderPath in Directory.GetDirectories(path))
+            return new
+            {
+                PathBreadCrumb = this.GetPathBreadCrumbData(path),
+                DirectorySeperator = Path.DirectorySeparatorChar,
+                WorkingDirectory = path,
+                LevelUpDirectory =this.GetParentPath(path),
+                Entries = returnValue
+            };
+        }
+
+        private string GetParentPath(string path)
+        {
+
+            if (path == THIS_PC)
+            {
+                return path;
+            }
+
+            var parent = Directory.GetParent(path);
+            if(parent!= null)
+            {
+                return parent.FullName;
+            }
+            else
+            {
+                return FileService.THIS_PC;
+            }
+        }
+
+        private void AddDriverItems(List<dynamic> returnValue)
+        {
+            //
+
+            foreach (var drive in Directory.GetLogicalDrives())
             {
                 returnValue.Add(new
                 {
-                    Name = Path.GetFileName(folderPath),
-                    Path = folderPath,
+                    Name = drive,
+                    Path = drive,
                     IsFile = false,
-                    IconBase64 = "data:image/png;base64, " + this.GetIconBase64(Resource.folder_ico)
+                    IconBase64 = "data:image/png;base64, " + this.GetIconBase64(Resource.disk)
                 });
             }
+            
+        }
 
+        private void AddFileItems(string path, List<dynamic> returnValue)
+        {
             foreach (var filePath in Directory.GetFiles(path))
             {
                 returnValue.Add(new
@@ -40,16 +101,23 @@ namespace kedi.engine.Services
                     IconBase64 = "data:image/png;base64, " + this.GetIconBase64(filePath)
                 });
             }
-
-            return new
-            {
-                PathBreadCrumb = this.GetPathBreadCrumbData(path),
-                DirectorySeperator = Path.DirectorySeparatorChar,
-                WorkingDirectory = path,
-                Entries = returnValue
-            };
         }
 
+        private void AddDirectoryItems(string path, List<dynamic> returnValue)
+        {
+            foreach (var folderPath in Directory.GetDirectories(path))
+            {
+                returnValue.Add(new
+                {
+                    Name = Path.GetFileName(folderPath),
+                    Path = folderPath,
+                    IsFile = false,
+                    IconBase64 = "data:image/png;base64, " + this.GetIconBase64(Resource.folder_ico)
+                });
+            }
+        }
+
+       
         private bool IsItLookLikeDump(string filePath)
         {
             string[] extensionListForDumps = new string[] { ".dmp" };
@@ -66,6 +134,11 @@ namespace kedi.engine.Services
             foreach (var folder in folders)
             {
                 currentPath += folder + Path.DirectorySeparatorChar;
+                if (folder == FileService.THIS_PC)
+                {
+                    currentPath = FileService.THIS_PC;
+                }
+
                 returnValue.Add(new
                 {
                     FullPath = currentPath,

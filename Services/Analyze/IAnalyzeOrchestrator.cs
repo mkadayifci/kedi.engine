@@ -7,6 +7,9 @@ namespace kedi.engine.Services.Analyze
     {
         ClrRuntime CreateRuntime(string dumpLocation);
         ClrRuntime GetRuntimeBySessionId(string sessionId);
+        void InitRuntimeBySessionId(string sessionId);
+        void RemoveRuntimeBySessionId(string sessionId);
+        void RemoveAllRuntimes();
         MemoryMap GetMemoryMapBySessionId(string sessionId);
     }
 }

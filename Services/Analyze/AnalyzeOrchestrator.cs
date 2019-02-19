@@ -3,9 +3,8 @@ using kedi.engine.Services.Sessions;
 using Microsoft.Diagnostics.Runtime;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
-
+using System.Linq;
 namespace kedi.engine.Services.Analyze
 {
     public class AnalyzeOrchestrator : IAnalyzeOrchestrator
@@ -28,7 +27,35 @@ namespace kedi.engine.Services.Analyze
             }
             return activeMemoryMaps[sessionId];
         }
+        public void InitRuntimeBySessionId(string sessionId)
+        {
+            this.GetRuntimeBySessionId(sessionId);
+        }
 
+        public void RemoveAllRuntimes()
+        {
+            List<string> activeKeys = activeRuntimes.Keys.ToList();
+            foreach (var key in activeKeys) 
+            {
+                this.RemoveRuntimeBySessionId(key);
+            }
+        }
+        public void RemoveRuntimeBySessionId(string sessionId)
+        {
+            try
+            {
+                activeRuntimes[sessionId].DataTarget.Dispose();
+
+            }
+            catch { }
+
+            try
+            {
+                activeRuntimes.Remove(sessionId);
+                activeMemoryMaps.Remove(sessionId);
+            }
+            catch { }
+        }
         public ClrRuntime GetRuntimeBySessionId(string sessionId)
         {
 
@@ -37,8 +64,7 @@ namespace kedi.engine.Services.Analyze
                 if (!activeRuntimes.ContainsKey(sessionId))
                 {
                     Session session = sessionManager.GetById(sessionId);
-                    ClrRuntime createdRuntime = CreateRuntime(ConfigurationManager.AppSettings["DataPath"] + "\\" + session.Identifier);
-
+                    ClrRuntime createdRuntime = CreateRuntime(session.Identifier);
 
                     //var debuggerInterface = (IDebugClient5)createdRuntime.DataTarget.DebuggerInterface;
                     //var debuggerControl = (IDebugControl5)createdRuntime.DataTarget.DebuggerInterface;
@@ -67,7 +93,7 @@ namespace kedi.engine.Services.Analyze
             ClrInfo version = dataTarget.ClrVersions[0];
 
             string dac = dataTarget.SymbolLocator.FindBinary(version.DacInfo, false);
-            
+
             if (dac == null || !File.Exists(dac))
             {
                 throw new FileNotFoundException("Could not find the specified dac.", dac);

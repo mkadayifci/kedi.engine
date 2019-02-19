@@ -176,6 +176,7 @@
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\SummaryController.cs" />
     <Compile Include="Controllers\ThreadsController.cs" />
+    <Compile Include="GeneralExceptionFilter.cs" />
     <Compile Include="MemoryRepresentation\MemoryMap.cs" />
     <Compile Include="MemoryRepresentation\MemoryMapGenerator.cs" />
     <Compile Include="MemoryRepresentation\MemoryObject.cs" />
@@ -211,6 +212,7 @@
     <Compile Include="Services\Sessions\ISessionManager.cs" />
     <Compile Include="Services\Sessions\Session.cs" />
     <Compile Include="Services\Sessions\SessionManager.cs" />
+    <Compile Include="Services\Sessions\SessionNotFoundException.cs" />
     <Compile Include="Services\SummaryService.cs" />
     <Compile Include="Services\ThreadService.cs" />
     <Compile Include="StartForm.cs">
@@ -270,6 +272,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="folder-ico.png" />
+    <Content Include="disk.png" />
     <Content Include="icon.ico" />
     <None Include="Resources\FolderIcon.ico" />
     <Content Include="Scripts\jquery-1.6.4-vsdoc.js" />

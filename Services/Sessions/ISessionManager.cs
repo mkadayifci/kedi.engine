@@ -11,5 +11,7 @@ namespace kedi.engine.Services.Sessions
         Dictionary<string, Session> GetSessions();
         Session Add(string identifier);
         Session GetById(string sessionId);
+        void CloseAllSessions();
+        void Close(string sessionId);
     }
 }

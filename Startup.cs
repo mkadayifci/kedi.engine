@@ -1,13 +1,17 @@
-﻿using Microsoft.Owin;
+﻿using kedi.engine.Services.Sessions;
+using Microsoft.Owin;
 using Microsoft.Owin.FileSystems;
 using Microsoft.Owin.StaticFiles;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Owin;
-using System.IO;
+using System;
+using System.Net;
+using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Web.Http;
+using System.Web.Http.Filters;
 
 [assembly: OwinStartup(typeof(kedi.engine.Startup))]
 namespace kedi.engine
@@ -16,8 +20,6 @@ namespace kedi.engine
     {
         public void Configuration(IAppBuilder app)
         {
-            // Configure Web API for self-host. 
-            // Note: I prefer my routes to be "api/{controller}/{action}" instead of "api/{controller}/{id}"
             HttpConfiguration config = new HttpConfiguration();
 
             config.Formatters.Clear();
@@ -35,7 +37,7 @@ namespace kedi.engine
                           defaults: new { id = RouteParameter.Optional }
                       );
 
-
+            config.Filters.Add(new GeneralExceptionFilter());
 
             app
             .UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll)
@@ -50,4 +52,6 @@ namespace kedi.engine
         }
 
     }
+
+
 }
