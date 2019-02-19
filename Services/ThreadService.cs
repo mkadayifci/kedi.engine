@@ -68,8 +68,8 @@ namespace kedi.engine.Services
         public List<dynamic> GetStackTrace(ClrThread thread)
         {
             List<dynamic> returnValue = new List<dynamic>();
-
-            foreach (ClrStackFrame frame in thread.StackTrace)
+            var stackTrace = thread.StackTrace;
+            foreach (ClrStackFrame frame in stackTrace)
             {
                 string displayString =
                     frame.Method != null && frame.DisplayString != frame.Method.ToString() ?

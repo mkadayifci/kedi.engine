@@ -1,17 +1,12 @@
-﻿using kedi.engine.Services.Sessions;
-using Microsoft.Owin;
+﻿using Microsoft.Owin;
 using Microsoft.Owin.FileSystems;
 using Microsoft.Owin.StaticFiles;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Owin;
-using System;
-using System.Net;
-using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Web.Http;
-using System.Web.Http.Filters;
 
 [assembly: OwinStartup(typeof(kedi.engine.Startup))]
 namespace kedi.engine

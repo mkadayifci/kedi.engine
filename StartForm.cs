@@ -15,7 +15,7 @@ namespace kedi.engine
 
         private void openWebApp_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start($"{this.baseUrl}/#/blocking-objects-analyzer/30230bf96a884830a0b96805cf173717");
+            System.Diagnostics.Process.Start($"{this.baseUrl}");
         }
 
         private void StartForm_Load(object sender, EventArgs e)
