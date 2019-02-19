@@ -11,10 +11,10 @@ namespace kedi.engine
         {
             RegisterDI();
 
-                using (WebApp.Start<Startup>(Program.APP_URL))
-                {
-                    Application.Run(new StartForm(Program.APP_URL));
-                                   }
+            using (WebApp.Start<Startup>(Program.APP_URL))
+            {
+                Application.Run(new StartForm(Program.APP_URL));
+            }
         }
 
         static void RegisterDI()

@@ -38,12 +38,14 @@ namespace kedi.engine
             .UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll)
             .MapSignalR()
             .UseWebApi(config)
-            .UseDefaultFiles()
-            .UseStaticFiles(new StaticFileOptions()
+            .UseFileServer(new FileServerOptions()
             {
+                EnableDefaultFiles = true,
+                EnableDirectoryBrowsing = false,
                 RequestPath = new PathString(""),
                 FileSystem = new PhysicalFileSystem(@".\webapp")
             });
+
         }
 
     }

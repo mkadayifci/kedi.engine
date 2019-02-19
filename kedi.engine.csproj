@@ -19,15 +19,15 @@
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Background</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>true</UpdatePeriodically>
+    <UpdateInterval>1</UpdateInterval>
+    <UpdateIntervalUnits>Hours</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>https://www.kedi-analyzer.com/publish/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationRevision>8</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -74,10 +74,13 @@
     <StartupObject>kedi.engine.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>kedi.engine_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
@@ -241,52 +244,58 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="kedi.engine_1_TemporaryKey.pfx" />
     <None Include="kedi.engine_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\LocalSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>LocalSettings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="webapp\fonts\fontawesome-webfont.674f50d2.eot" />
-    <None Include="webapp\fonts\fontawesome-webfont.af7ae505.woff2" />
-    <None Include="webapp\fonts\fontawesome-webfont.b06871f2.ttf" />
-    <None Include="webapp\fonts\fontawesome-webfont.fee66e71.woff" />
-    <None Include="webapp\fonts\open-sans-latin-300.521d17bc.woff" />
-    <None Include="webapp\fonts\open-sans-latin-300.60c86674.woff2" />
-    <None Include="webapp\fonts\open-sans-latin-300italic.06bbd318.woff2" />
-    <None Include="webapp\fonts\open-sans-latin-300italic.8a648ff3.woff" />
-    <None Include="webapp\fonts\open-sans-latin-400.bf2d0783.woff" />
-    <None Include="webapp\fonts\open-sans-latin-400.cffb686d.woff2" />
-    <None Include="webapp\fonts\open-sans-latin-400italic.987032ea.woff2" />
-    <None Include="webapp\fonts\open-sans-latin-400italic.db70d0b9.woff" />
-    <None Include="webapp\fonts\open-sans-latin-600.1cd5320f.woff" />
-    <None Include="webapp\fonts\open-sans-latin-600.223a277b.woff2" />
-    <None Include="webapp\fonts\open-sans-latin-600italic.318ea1ad.woff" />
-    <None Include="webapp\fonts\open-sans-latin-600italic.4950a720.woff2" />
-    <None Include="webapp\fonts\open-sans-latin-700.623e3205.woff" />
-    <None Include="webapp\fonts\open-sans-latin-700.d08c09f2.woff2" />
-    <None Include="webapp\fonts\open-sans-latin-700italic.72e19cbb.woff" />
-    <None Include="webapp\fonts\open-sans-latin-700italic.c02f5da6.woff2" />
-    <None Include="webapp\fonts\open-sans-latin-800.aaeffaf2.woff2" />
-    <None Include="webapp\fonts\open-sans-latin-800.c6aa0c4a.woff" />
-    <None Include="webapp\fonts\open-sans-latin-800italic.6b3973ff.woff2" />
-    <None Include="webapp\fonts\open-sans-latin-800italic.79b58175.woff" />
-    <None Include="webapp\fonts\ubuntu-mono-latin-400.9937c52e.woff2" />
-    <None Include="webapp\fonts\ubuntu-mono-latin-400.fda3eddd.woff" />
-    <None Include="webapp\fonts\ubuntu-mono-latin-400italic.4cbe65be.woff2" />
-    <None Include="webapp\fonts\ubuntu-mono-latin-400italic.c2cb57e6.woff" />
-    <None Include="webapp\fonts\ubuntu-mono-latin-700.15a5b8c8.woff" />
-    <None Include="webapp\fonts\ubuntu-mono-latin-700.35243340.woff2" />
-    <None Include="webapp\fonts\ubuntu-mono-latin-700italic.123009e4.woff" />
-    <None Include="webapp\fonts\ubuntu-mono-latin-700italic.b58ee8b3.woff2" />
-    <None Include="webapp\js\app.a93daeea.js.map" />
-    <None Include="webapp\js\chunk-vendors.dcd5453f.js.map" />
+    <Content Include="webapp\fonts\fontawesome-webfont.674f50d2.eot" />
+    <Content Include="webapp\fonts\fontawesome-webfont.af7ae505.woff2" />
+    <Content Include="webapp\fonts\fontawesome-webfont.b06871f2.ttf" />
+    <Content Include="webapp\fonts\fontawesome-webfont.fee66e71.woff" />
+    <Content Include="webapp\fonts\open-sans-latin-300.521d17bc.woff" />
+    <Content Include="webapp\fonts\open-sans-latin-300.60c86674.woff2" />
+    <Content Include="webapp\fonts\open-sans-latin-300italic.06bbd318.woff2" />
+    <Content Include="webapp\fonts\open-sans-latin-300italic.8a648ff3.woff" />
+    <Content Include="webapp\fonts\open-sans-latin-400.bf2d0783.woff" />
+    <Content Include="webapp\fonts\open-sans-latin-400.cffb686d.woff2" />
+    <Content Include="webapp\fonts\open-sans-latin-400italic.987032ea.woff2" />
+    <Content Include="webapp\fonts\open-sans-latin-400italic.db70d0b9.woff" />
+    <Content Include="webapp\fonts\open-sans-latin-600.1cd5320f.woff" />
+    <Content Include="webapp\fonts\open-sans-latin-600.223a277b.woff2" />
+    <Content Include="webapp\fonts\open-sans-latin-600italic.318ea1ad.woff" />
+    <Content Include="webapp\fonts\open-sans-latin-600italic.4950a720.woff2" />
+    <Content Include="webapp\fonts\open-sans-latin-700.623e3205.woff" />
+    <Content Include="webapp\fonts\open-sans-latin-700.d08c09f2.woff2" />
+    <Content Include="webapp\fonts\open-sans-latin-700italic.72e19cbb.woff" />
+    <Content Include="webapp\fonts\open-sans-latin-700italic.c02f5da6.woff2" />
+    <Content Include="webapp\fonts\open-sans-latin-800.aaeffaf2.woff2" />
+    <Content Include="webapp\fonts\open-sans-latin-800.c6aa0c4a.woff" />
+    <Content Include="webapp\fonts\open-sans-latin-800italic.6b3973ff.woff2" />
+    <Content Include="webapp\fonts\open-sans-latin-800italic.79b58175.woff" />
+    <Content Include="webapp\fonts\ubuntu-mono-latin-400.9937c52e.woff2" />
+    <Content Include="webapp\fonts\ubuntu-mono-latin-400.fda3eddd.woff" />
+    <Content Include="webapp\fonts\ubuntu-mono-latin-400italic.4cbe65be.woff2" />
+    <Content Include="webapp\fonts\ubuntu-mono-latin-400italic.c2cb57e6.woff" />
+    <Content Include="webapp\fonts\ubuntu-mono-latin-700.15a5b8c8.woff" />
+    <Content Include="webapp\fonts\ubuntu-mono-latin-700.35243340.woff2" />
+    <Content Include="webapp\fonts\ubuntu-mono-latin-700italic.123009e4.woff" />
+    <Content Include="webapp\fonts\ubuntu-mono-latin-700italic.b58ee8b3.woff2" />
+    <Content Include="webapp\js\app.3ed81d9e.js.map" />
+    <Content Include="webapp\js\chunk-vendors.dd13a274.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DumpDataFolder\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="webapp\css\app.80cf5fcb.css" />
+    <Content Include="webapp\css\chunk-vendors.746bfa0e.css" />
+    <Content Include="webapp\favicon.ico" />
+    <Content Include="webapp\img\fontawesome-webfont.912ec66d.svg" />
+    <Content Include="webapp\index.html" />
+    <Content Include="webapp\js\app.3ed81d9e.js" />
+    <Content Include="webapp\js\chunk-vendors.dd13a274.js" />
     <None Include="folder-ico.png" />
     <Content Include="disk.png" />
     <Content Include="icon.ico" />
@@ -296,13 +305,6 @@
     <Content Include="Scripts\jquery-1.6.4.min.js" />
     <Content Include="Scripts\jquery.signalR-2.4.0.js" />
     <Content Include="Scripts\jquery.signalR-2.4.0.min.js" />
-    <Content Include="webapp\css\app.f68904d5.css" />
-    <Content Include="webapp\css\chunk-vendors.bace7cc8.css" />
-    <Content Include="webapp\favicon.ico" />
-    <Content Include="webapp\img\fontawesome-webfont.912ec66d.svg" />
-    <Content Include="webapp\index.html" />
-    <Content Include="webapp\js\app.a93daeea.js" />
-    <Content Include="webapp\js\chunk-vendors.dcd5453f.js" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
