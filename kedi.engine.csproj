@@ -225,6 +225,7 @@
     <Compile Include="Services\Analyzers\DuplicateStringsAnalyzer.cs" />
     <Compile Include="Services\Analyzers\ExceptionAnalyzer.cs" />
     <Compile Include="Services\Analyzers\ObjectMemoryImpactAnalyzer.cs" />
+    <Compile Include="Services\Analyze\Source32BitException.cs" />
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\MemoryService.cs" />
     <Compile Include="Services\ModulesService.cs" />
