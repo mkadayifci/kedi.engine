@@ -96,7 +96,7 @@ namespace kedi.engine.Services.Analyze
 
             if (dac == null || !File.Exists(dac))
             {
-                throw new FileNotFoundException("Could not find the specified dac.", dac);
+                throw new DacNotFoundException("Could not find the specified dac.");
             }
 
             return version.CreateRuntime(dac);

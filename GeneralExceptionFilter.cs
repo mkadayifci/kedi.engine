@@ -18,7 +18,6 @@ namespace kedi.engine
 
             Exception currentException = actionExecutedContext.Exception;
             logger.Error(currentException, string.Empty);
-            logger.Warning("This is first name: {name} and this is last : {last} ", "Mehmet", "Kadayıfçı");
             Type exceptionType = currentException.GetType();
 
             HttpStatusCode status = HttpStatusCode.InternalServerError;
@@ -34,7 +33,7 @@ namespace kedi.engine
             base.OnException(actionExecutedContext);
         }
 
-        private  int GetSubcodeForException(Type exceptionType)
+        private int GetSubcodeForException(Type exceptionType)
         {
             if (exceptionType == typeof(SessionNotFoundException))
             {
@@ -43,6 +42,10 @@ namespace kedi.engine
             else if (exceptionType == typeof(Source32BitException))
             {
                 return 101;
+            }
+            else if (exceptionType == typeof(DacNotFoundException))
+            {
+                return 102;
             }
 
             return default(int);
