@@ -28,25 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StartForm));
             this.infoLabel = new System.Windows.Forms.Label();
             this.openWebApp = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // infoLabel
             // 
-            this.infoLabel.AutoSize = true;
-            this.infoLabel.Location = new System.Drawing.Point(12, 23);
+            this.infoLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.infoLabel.Font = new System.Drawing.Font("Tahoma", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.infoLabel.Location = new System.Drawing.Point(17, 24);
+            this.infoLabel.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.infoLabel.Name = "infoLabel";
-            this.infoLabel.Size = new System.Drawing.Size(571, 13);
+            this.infoLabel.Size = new System.Drawing.Size(1265, 152);
             this.infoLabel.TabIndex = 0;
             this.infoLabel.Text = "kedi-anlayzer runs in web browser window. You can manualy browse http://localhost" +
-    ":8000 or just click the button nelow";
+    ":8000 or just click the button below";
+            this.infoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // openWebApp
             // 
-            this.openWebApp.Location = new System.Drawing.Point(50, 62);
+            this.openWebApp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.openWebApp.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.openWebApp.Location = new System.Drawing.Point(17, 194);
+            this.openWebApp.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.openWebApp.Name = "openWebApp";
-            this.openWebApp.Size = new System.Drawing.Size(472, 100);
+            this.openWebApp.Size = new System.Drawing.Size(1265, 369);
             this.openWebApp.TabIndex = 1;
             this.openWebApp.Text = "Open Kedi App";
             this.openWebApp.UseVisualStyleBackColor = true;
@@ -54,19 +64,20 @@
             // 
             // StartForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(604, 190);
+            this.ClientSize = new System.Drawing.Size(1299, 579);
             this.Controls.Add(this.openWebApp);
             this.Controls.Add(this.infoLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.MaximizeBox = false;
             this.Name = "StartForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "kedi-analyzer Host";
             this.Load += new System.EventHandler(this.StartForm_Load);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

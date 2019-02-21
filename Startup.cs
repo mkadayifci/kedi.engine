@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Owin;
+using System.Net;
 using System.Net.Http.Formatting;
 using System.Web.Http;
 
@@ -14,6 +15,25 @@ namespace kedi.engine
     public class Startup
     {
         public void Configuration(IAppBuilder app)
+        {
+
+            app
+            .UseCLRRuntimeEngineLocker()
+            .UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll)
+            .MapSignalR()
+            .UseWebApi(GetWebApiConfiguration())
+            .UseFileServer(new FileServerOptions()
+            {
+                EnableDefaultFiles = true,
+                EnableDirectoryBrowsing = false,
+                RequestPath = new PathString(""),
+                FileSystem = new PhysicalFileSystem(@".\webapp")
+            });
+
+
+        }
+
+        private static HttpConfiguration GetWebApiConfiguration()
         {
             HttpConfiguration config = new HttpConfiguration();
 
@@ -33,21 +53,8 @@ namespace kedi.engine
                       );
 
             config.Filters.Add(new GeneralExceptionFilter());
-
-            app
-            .UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll)
-            .MapSignalR()
-            .UseWebApi(config)
-            .UseFileServer(new FileServerOptions()
-            {
-                EnableDefaultFiles = true,
-                EnableDirectoryBrowsing = false,
-                RequestPath = new PathString(""),
-                FileSystem = new PhysicalFileSystem(@".\webapp")
-            });
-
+            return config;
         }
-
     }
 
 

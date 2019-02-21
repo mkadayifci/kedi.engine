@@ -13,21 +13,6 @@ namespace kedi.engine.Services.Sessions
         }
         public SessionManager()
         {
-            //activeSessions.Add(
-            //                    "gh463d1\\ScheduledService.dmp",
-            //                    new Session(
-            //                                "gh463d1\\ScheduledService.dmp",
-            //                                "30230bf96a884830a0b96805cf173717",
-            //                                "ScheduledService.dmp"));
-            //activeSessions.Add(
-            //                    "gh463d1\\ScheduledService_ConsoleApp.dmp",
-            //                    new Session(
-            //                                "gh463d1\\ScheduledService_ConsoleApp2.dmp",
-            //                                "30230bf96a884830a0b96805cf173717",
-            //                                "ScheduledService_ConsoleApp2.dmp"));
-
-
-
 
         }
 
@@ -47,7 +32,7 @@ namespace kedi.engine.Services.Sessions
 
         public Session Add(string path)
         {
-            if (activeSessions.Values.Count > 0) { throw new Exception("There is already open session in memory, please first close it."); }
+            if (activeSessions.Values.Count > 0) { throw new Exception("There is already open session in memory, please close it first."); }
 
             string sessionIdForPath = this.GetSessionId(path);
             if (!activeSessions.ContainsKey(path))

@@ -18,6 +18,14 @@ namespace kedi.engine.Services.Analyzers
                 ExactMatchData = this.GetExactStackTraceMatches(runtime)
             };
         }
+
+        private string GetDisplayString(ClrStackFrame frame)
+        {
+            return frame.Method != null && frame.DisplayString != frame.Method.ToString() ?
+                                  $"[{frame.DisplayString}] {frame.Method.ToString()}" :
+                                  frame.DisplayString;
+        }
+
         public dynamic GetExactStackTraceMatches(ClrRuntime runtime)
         {
             var returnValue = new Dictionary<string, List<uint>>();
@@ -28,7 +36,7 @@ namespace kedi.engine.Services.Analyzers
 
                 foreach (ClrStackFrame frame in thread.StackTrace)
                 {
-                    threadStackKey += frame.DisplayString ?? string.Empty;
+                    threadStackKey += this.GetDisplayString(frame) + "\n";
                 }
 
                 if (string.IsNullOrWhiteSpace(threadStackKey))
@@ -41,9 +49,17 @@ namespace kedi.engine.Services.Analyzers
 
                 returnValue[threadStackKey].Add(thread.OSThreadId);
             }
-            return returnValue.Values.
-                                Where(item => item.Count > 1).
-                                ToList();
+
+            return returnValue
+                    .Where(item => item.Value.Count > 1)
+                    .Select(item => new
+                    {
+                        NumberOfThreads = item.Value.Count,
+                        CallStack = item.Key.Split('\n').Where(displayString => !string.IsNullOrEmpty(displayString)),
+                        OsThreadIds = item.Value
+                    })
+                    .ToList();
+
         }
 
         public List<StackAnalyzeObject> GetMethodHitData(ClrRuntime runtime)
