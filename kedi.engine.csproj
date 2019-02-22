@@ -27,7 +27,7 @@
     <InstallUrl>https://www.kedi-analyzer.com/publish/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>9</ApplicationRevision>
+    <ApplicationRevision>10</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -257,6 +257,16 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>LocalSettings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="webapp\js\app.9d5973f5.js.map" />
+    <Content Include="webapp\js\chunk-vendors.f825bafe.js.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DumpDataFolder\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="webapp\css\app.883b4e40.css" />
+    <Content Include="webapp\css\chunk-vendors.746bfa0e.css" />
+    <Content Include="webapp\favicon.ico" />
     <Content Include="webapp\fonts\fontawesome-webfont.674f50d2.eot" />
     <Content Include="webapp\fonts\fontawesome-webfont.af7ae505.woff2" />
     <Content Include="webapp\fonts\fontawesome-webfont.b06871f2.ttf" />
@@ -289,20 +299,10 @@
     <Content Include="webapp\fonts\ubuntu-mono-latin-700.35243340.woff2" />
     <Content Include="webapp\fonts\ubuntu-mono-latin-700italic.123009e4.woff" />
     <Content Include="webapp\fonts\ubuntu-mono-latin-700italic.b58ee8b3.woff2" />
-    <Content Include="webapp\js\app.3ed81d9e.js.map" />
-    <Content Include="webapp\js\chunk-vendors.dd13a274.js.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DumpDataFolder\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="webapp\css\app.80cf5fcb.css" />
-    <Content Include="webapp\css\chunk-vendors.746bfa0e.css" />
-    <Content Include="webapp\favicon.ico" />
     <Content Include="webapp\img\fontawesome-webfont.912ec66d.svg" />
     <Content Include="webapp\index.html" />
-    <Content Include="webapp\js\app.3ed81d9e.js" />
-    <Content Include="webapp\js\chunk-vendors.dd13a274.js" />
+    <Content Include="webapp\js\app.9d5973f5.js" />
+    <Content Include="webapp\js\chunk-vendors.f825bafe.js" />
     <None Include="folder-ico.png" />
     <Content Include="disk.png" />
     <Content Include="icon.ico" />

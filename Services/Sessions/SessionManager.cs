@@ -5,18 +5,17 @@ namespace kedi.engine.Services.Sessions
 {
     public class SessionManager : ISessionManager
     {
-
         private Dictionary<string, Session> activeSessions = new Dictionary<string, Session>();
+
         public Dictionary<string, Session> GetSessions()
         {
             return activeSessions;
         }
+
         public SessionManager()
         {
 
         }
-
-
 
         public Session GetById(string sessionId)
         {
@@ -25,9 +24,7 @@ namespace kedi.engine.Services.Sessions
                 if (session.SessionId == sessionId)
                     return session;
             }
-
             throw new SessionNotFoundException("There is no active session");
-
         }
 
         public Session Add(string path)
@@ -41,25 +38,23 @@ namespace kedi.engine.Services.Sessions
             }
             return activeSessions[sessionIdForPath];
         }
+
         public void CloseAllSessions()
         {
             //TODO: Dispose all
             activeSessions.Clear();
         }
+
         public void Close(string sessionId)
         {
             //TODO:Dispose
             activeSessions.Remove(sessionId);
         }
+
         private string GetSessionId(string path)
         {
             System.IO.FileInfo f = new System.IO.FileInfo(path);
             return $"{path}-{f.Length}".GetHashCode().ToString().Replace("-", "X");
         }
-        private void StartSession() { }
-
-
-
     }
-
 }

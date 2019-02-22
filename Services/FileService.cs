@@ -30,7 +30,6 @@ namespace kedi.engine.Services
         {
             List<dynamic> returnValue = new List<dynamic>();
 
-
             path = this.ConvertSpecialFolder(path);
             if (path == FileService.THIS_PC)
             {
@@ -47,8 +46,10 @@ namespace kedi.engine.Services
                 PathBreadCrumb = this.GetPathBreadCrumbData(path),
                 DirectorySeperator = Path.DirectorySeparatorChar,
                 WorkingDirectory = path,
-                LevelUpDirectory =this.GetParentPath(path),
+                LevelUpDirectory = this.GetParentPath(path),
                 Entries = returnValue
+                                    .OrderBy(item => item.IsFile) //First folders
+                                    .ThenByDescending(item => item.IsFile ? item.ItLooksLikeDump : true) //Then dump files in the first seats
             };
         }
 
@@ -61,7 +62,7 @@ namespace kedi.engine.Services
             }
 
             var parent = Directory.GetParent(path);
-            if(parent!= null)
+            if (parent != null)
             {
                 return parent.FullName;
             }
@@ -85,7 +86,7 @@ namespace kedi.engine.Services
                     IconBase64 = "data:image/png;base64, " + this.GetIconBase64(Resource.disk)
                 });
             }
-            
+
         }
 
         private void AddFileItems(string path, List<dynamic> returnValue)
@@ -117,7 +118,7 @@ namespace kedi.engine.Services
             }
         }
 
-       
+
         private bool IsItLookLikeDump(string filePath)
         {
             string[] extensionListForDumps = new string[] { ".dmp" };
