@@ -12,10 +12,6 @@ namespace kedi.engine.Controllers.Analyzers
         public IHttpActionResult Get([FromUri]string sessionId)
         {
             return Ok(analyzer.Analyze(sessionId));
-        }
-
+        }    
     }
 }
-
-
-

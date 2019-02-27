@@ -1,5 +1,4 @@
-﻿using kedi.engine.Services;
-using kedi.engine.Services.Analyzers;
+﻿using kedi.engine.Services.Analyzers;
 using System.Web.Http;
 
 namespace kedi.engine.Controllers.Analyzers
@@ -14,10 +13,5 @@ namespace kedi.engine.Controllers.Analyzers
         {
             return Ok(analyzer.Analyze(sessionId));
         }
-
     }
 }
-
-
-
-

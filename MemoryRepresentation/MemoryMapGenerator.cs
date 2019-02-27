@@ -30,9 +30,10 @@ namespace kedi.engine.MemoryRepresentation
                 {
                     Address = currentObject.Address,
                     FieldName = parentObjectField,
-                    RelatedType=parentObject.TypeName??string.Empty,
-                    BaseAddress= parentObject.Address
+                    RelatedType = parentObject.TypeName ?? string.Empty,
+                    BaseAddress = parentObject.Address
                 };
+
                 if (!currentObject.ReferencedByObjects.Contains(relatedObject))
                 {
                     currentObject.ReferencedByObjects.Add(relatedObject);
@@ -53,6 +54,7 @@ namespace kedi.engine.MemoryRepresentation
                 currentObject.Size = currentType.GetSize(objectPointer);
                 currentObject.TypeName = currentType.Name;
 
+
                 currentType.EnumerateRefsOfObject(objectPointer, (ulong childObjectAddress, int offset) =>
                 {
 
@@ -61,17 +63,35 @@ namespace kedi.engine.MemoryRepresentation
                     {
                         this.FindRefs(heap, childObjectAddress, memoryMap, currentObject, fieldName);
                     }
-                        RelatedMemoryObject relatedObject = new RelatedMemoryObject()
+                    else
+                    {
+                        var relatedObject = new RelatedMemoryObject()
                         {
                             Address = childObjectAddress,
                             FieldName = fieldName,
-                            RelatedType = currentObject.TypeName,
-                            BaseAddress= objectPointer
+                            RelatedType = currentObject.TypeName,//TODO: Error this type parent's type
+                            BaseAddress = currentObject.Address
 
                         };
 
-                        currentObject.ReferencedObjects.Add(relatedObject);
+                        if (!memoryMap.Dictionary[childObjectAddress].ReferencedByObjects.Contains(relatedObject))
+                        {
+                            memoryMap.Dictionary[childObjectAddress].ReferencedByObjects.Add(relatedObject);
+                        }
+
+                    }
+
+
+                    currentObject.ReferencedObjects.Add(new RelatedMemoryObject()
+                    {
+                        Address = childObjectAddress,
+                        FieldName = fieldName,
+                        RelatedType = currentObject.TypeName,//TODO: Error this type parent's type
+                        BaseAddress = objectPointer
+
+                    });
                 });
+
             }
         }
 

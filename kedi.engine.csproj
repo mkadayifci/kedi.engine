@@ -7,14 +7,14 @@
     <ProjectGuid>{9882E45C-F8B1-48FA-AC71-A37EC5788080}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>kedi.engine</RootNamespace>
-    <AssemblyName>Kedi Analyzer</AssemblyName>
+    <AssemblyName>kedi</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <TargetFrameworkProfile />
-    <PublishUrl>ftp://ftp.kedi-analyzer.com/</PublishUrl>
+    <PublishUrl>ftp://ftp.kedi.io/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -24,10 +24,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>https://www.kedi-analyzer.com/publish/</InstallUrl>
+    <InstallUrl>https://www.kedi.io/publish/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>10</ApplicationRevision>
+    <ApplicationRevision>14</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

@@ -3,14 +3,16 @@ using kedi.engine.Services.Analyze;
 using Microsoft.Diagnostics.Runtime;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace kedi.engine.Services
 {
     public class ObjectService
     {
+
+
+
+
+
         IAnalyzeOrchestrator analyzeOrchestrator = ContainerManager.Container.Resolve<IAnalyzeOrchestrator>();
 
         public dynamic GetObjectDetail(string sessionId, ulong objPtr)
@@ -20,42 +22,110 @@ namespace kedi.engine.Services
             ClrType type = runtime.Heap.GetObjectType(objPtr);
             ClrObject clrObject = new ClrObject(objPtr, type);
 
-            MemoryObject memoryObjectForCurrent = null;
-            if (memoryMap.Dictionary.ContainsKey(objPtr))
+            MemoryObject memoryObjectForCurrent = this.GetMemoryObject(objPtr, memoryMap);
+
+            var returnValue = this.GenerateBasicProps(objPtr, clrObject, type, memoryObjectForCurrent);
+
+            if (type.IsArray)
             {
-                memoryObjectForCurrent = memoryMap.Dictionary[objPtr];
+
+                int arrayLength = type.GetArrayLength(clrObject);
+                bool hasElementSimpleValue = type.ComponentType.HasSimpleValue;
+                for (int i = 0; i < arrayLength; i++)
+                {
+                    var addressOfElement = type.GetArrayElementAddress(objPtr, i);
+                    if (hasElementSimpleValue)
+                    {
+                        returnValue.ArrayElements.Add(new { Index = i, IsContainsAddress = false, Address = addressOfElement, Value = type.GetArrayElementValue(objPtr, i) });
+                    }
+                    else
+                    {
+                        string computedValue = addressOfElement.ToString();
+                        if (type.ComponentType.Name == "System.DateTime")
+                        {
+                            ulong dateData = (ulong)type.ComponentType.GetFieldByName("dateData").GetValue(addressOfElement);
+
+                            
+                            computedValue = this.GetDateTime(dateData).ToString("yyyy-MM-dd HH:mm:ss \"GMT\"zzz");
+                        }
+
+                        returnValue.ArrayElements.Add(new { Index = i, IsContainsAddress = true, Address = addressOfElement, Value = computedValue });
+                    }
+                }
+
+            }
+            else
+            {
+                returnValue.Members.AddRange(this.GetMembers(type, objPtr));
             }
 
-            var returnValue = new
+            return returnValue;
+        }
+        private DateTime GetDateTime(ulong dateData)
+        {
+            const ulong DateTimeTicksMask = 0x3FFFFFFFFFFFFFFF;
+            const ulong DateTimeKindMask = 0xC000000000000000;
+            const ulong KindUnspecified = 0x0000000000000000;
+            const ulong KindUtc = 0x4000000000000000;
+
+            long ticks = (long)(dateData & DateTimeTicksMask);
+            ulong internalKind = dateData & DateTimeKindMask;
+
+            switch (internalKind)
             {
-                ObjectPointer = objPtr,
-                clrObject.HexAddress,
-                clrObject.Size,
-                clrObject.IsArray,
-                clrObject.IsBoxed,
-                clrObject.IsNull,
-                memoryObjectForCurrent?.ReferencedByObjects,
-                memoryObjectForCurrent?.ReferencedObjects,
-                BaseTypeName = type.BaseType?.Name,
-                type.MethodTable,
-                ElementType = type.ElementType.ToString(),
-                TypeName = type.Name,
-                //ObjectValue = type.GetValue(objPtr),
+                case KindUnspecified:
+                    return new DateTime(ticks, DateTimeKind.Unspecified);
+
+                case KindUtc:
+                    return new DateTime(ticks, DateTimeKind.Utc);
+
+                default:
+                    return new DateTime(ticks, DateTimeKind.Local);
+            }
+        }
+
+        private MemoryObject GetMemoryObject(ulong objectPointer, MemoryMap memoryMap)
+        {
+            MemoryObject memoryObjectForCurrent = null;
+            if (memoryMap.Dictionary.ContainsKey(objectPointer))
+            {
+                memoryObjectForCurrent = memoryMap.Dictionary[objectPointer];
+            }
+
+            return memoryObjectForCurrent;
+        }
+
+        private dynamic GenerateBasicProps(ulong objectPointer, ClrObject currentObject, ClrType currentType, MemoryObject currentMemoryMap)
+        {
+            return new
+            {
+                ObjectPointer = objectPointer,
+                currentObject.HexAddress,
+                currentObject.Size,
+                currentObject.IsArray,
+                currentObject.IsBoxed,
+                currentObject.IsNull,
+                currentMemoryMap?.ReferencedByObjects,
+                currentMemoryMap?.ReferencedObjects,
+                BaseTypeName = currentType.BaseType?.Name,
+                currentType.MethodTable,
+                ElementType = currentType.ElementType.ToString(),
+                TypeName = currentType.Name,
                 Members = new List<dynamic>(),
+                ArrayElements = new List<dynamic>(),
                 Values = new List<DateTime>(),
-                Module = type.Module.Name
+                Module = currentType.Module.Name
             };
 
-            try
-            {
-                returnValue.Values.Add(clrObject.GetField<DateTime>("m_start"));
-            }
-            catch (Exception ex) { }
 
-            foreach (ClrInstanceField field in type.Fields)
+        }
+
+        private List<dynamic> GetMembers(ClrType currentType, ulong objectPointer)
+        {
+            List<dynamic> returnValue = new List<dynamic>();
+
+            foreach (ClrInstanceField field in currentType.Fields)
             {
-                var mt = runtime.Heap.GetMethodTable(1083183186312);
-                var t = runtime.Heap.GetTypeByName("System.DateTime");
                 string fieldType = field.Type == null ? "<TYPE>" : field.Type.Name;
                 dynamic fieldDetail = new
                 {
@@ -67,24 +137,14 @@ namespace kedi.engine.Services
                     field.Offset,
                     field.IsPublic,
                     FieldType = field.Type.Name,
-                    Address = field.GetAddress(objPtr),
-                    Value = field.GetValue(objPtr)
+                    Address = field.GetAddress(objectPointer),
+                    Value = field.GetValue(objectPointer)
                 };
 
-                if (fieldDetail.Name == "m_start")
-                {
-
-                    var gg = fieldDetail.Value;
-                }
-                try
-                {
-                    var val = field.GetValue(fieldDetail.Address);
-                }
-                catch { }
-                returnValue.Members.Add(fieldDetail);
-
+                returnValue.Add(fieldDetail);
             }
             return returnValue;
         }
     }
+
 }

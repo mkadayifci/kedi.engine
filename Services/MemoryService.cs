@@ -28,7 +28,6 @@ namespace kedi.engine.Services
                     returnValue.LOHLength += seg.Gen2Length;
                 else
                     returnValue.Gen2Length += seg.Gen2Length;
-
                 for (ulong obj = seg.FirstObject; obj != 0; obj = seg.NextObject(obj))
                 {
                     ClrType type = runtime.Heap.GetObjectType(obj);
