@@ -27,7 +27,7 @@
     <InstallUrl>https://kedi.io/publish/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>19</ApplicationRevision>
+    <ApplicationRevision>20</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -228,6 +228,7 @@
     <Compile Include="Services\Analyzers\ExceptionAnalyzer.cs" />
     <Compile Include="Services\Analyzers\ObjectMemoryImpactAnalyzer.cs" />
     <Compile Include="Services\Analyze\Source32BitException.cs" />
+    <Compile Include="Services\Analyze\SourceNotCompatibleException.cs" />
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\MemoryService.cs" />
     <Compile Include="Services\ModulesService.cs" />
