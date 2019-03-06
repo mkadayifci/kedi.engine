@@ -8,11 +8,6 @@ namespace kedi.engine.Services
 {
     public class ObjectService
     {
-
-
-
-
-
         IAnalyzeOrchestrator analyzeOrchestrator = ContainerManager.Container.Resolve<IAnalyzeOrchestrator>();
 
         public dynamic GetObjectDetail(string sessionId, ulong objPtr)
@@ -24,43 +19,62 @@ namespace kedi.engine.Services
 
             MemoryObject memoryObjectForCurrent = this.GetMemoryObject(objPtr, memoryMap);
 
-            var returnValue = this.GenerateBasicProps(objPtr, clrObject, type, memoryObjectForCurrent);
+            var objectDetail = this.GenerateBasicProps(objPtr, clrObject, type, memoryObjectForCurrent);
 
             if (type.IsArray)
             {
-
-                int arrayLength = type.GetArrayLength(clrObject);
-                bool hasElementSimpleValue = type.ComponentType.HasSimpleValue;
-                for (int i = 0; i < arrayLength; i++)
-                {
-                    var addressOfElement = type.GetArrayElementAddress(objPtr, i);
-                    if (hasElementSimpleValue)
-                    {
-                        returnValue.ArrayElements.Add(new { Index = i, IsContainsAddress = false, Address = addressOfElement, Value = type.GetArrayElementValue(objPtr, i) });
-                    }
-                    else
-                    {
-                        string computedValue = addressOfElement.ToString();
-                        if (type.ComponentType.Name == "System.DateTime")
-                        {
-                            ulong dateData = (ulong)type.ComponentType.GetFieldByName("dateData").GetValue(addressOfElement);
-
-                            
-                            computedValue = this.GetDateTime(dateData).ToString("yyyy-MM-dd HH:mm:ss \"GMT\"zzz");
-                        }
-
-                        returnValue.ArrayElements.Add(new { Index = i, IsContainsAddress = true, Address = addressOfElement, Value = computedValue });
-                    }
-                }
-
+                objectDetail.ArrayElements.AddRange(this.GetArrayElements(runtime, type, clrObject));
             }
             else
             {
-                returnValue.Members.AddRange(this.GetMembers(type, objPtr));
+                objectDetail.Members.AddRange(this.GetMembers(type, objPtr));
             }
 
-            return returnValue;
+            return objectDetail;
         }
+
+        private List<dynamic> GetArrayElements(ClrRuntime runtime, ClrType type, ClrObject clrObject)
+        {
+            List<dynamic> elements = new List<dynamic>();
+            int arrayLength = type.GetArrayLength(clrObject);
+            bool hasElementSimpleValue = type.ComponentType.HasSimpleValue;
+            for (int i = 0; i < arrayLength; i++)
+            {
+                var addressOfElement = type.GetArrayElementAddress(clrObject.Address, i);
+                if (hasElementSimpleValue)
+                {
+                    runtime.Heap.ReadPointer(addressOfElement, out ulong elementInstanceAddress);
+                    elements.Add(new
+                    {
+                        Index = i,
+                        IsContainsAddress = false,
+                        Address = elementInstanceAddress,
+                        Value = type.GetArrayElementValue(clrObject.Address, i)
+                    });
+                }
+                else
+                {
+                    string computedValue = addressOfElement.ToString();
+                    if (type.ComponentType.Name == "System.DateTime")
+                    {
+                        ulong dateData = (ulong)type.ComponentType.GetFieldByName("dateData").GetValue(addressOfElement);
+
+
+                        computedValue = this.GetDateTime(dateData).ToString("yyyy-MM-dd HH:mm:ss \"GMT\"zzz");
+                    }
+
+                    elements.Add(new
+                    {
+                        Index = i,
+                        IsContainsAddress = true,
+                        Address = addressOfElement,
+                        Value = computedValue
+                    });
+                }
+            }
+            return elements;
+        }
+
         private DateTime GetDateTime(ulong dateData)
         {
             const ulong DateTimeTicksMask = 0x3FFFFFFFFFFFFFFF;
@@ -122,7 +136,7 @@ namespace kedi.engine.Services
 
         private List<dynamic> GetMembers(ClrType currentType, ulong objectPointer)
         {
-            List<dynamic> returnValue = new List<dynamic>();
+            List<dynamic> members = new List<dynamic>();
 
             foreach (ClrInstanceField field in currentType.Fields)
             {
@@ -141,9 +155,9 @@ namespace kedi.engine.Services
                     Value = field.GetValue(objectPointer)
                 };
 
-                returnValue.Add(fieldDetail);
+                members.Add(fieldDetail);
             }
-            return returnValue;
+            return members;
         }
     }
 

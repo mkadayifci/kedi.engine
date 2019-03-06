@@ -1,6 +1,7 @@
 ﻿using kedi.engine.MemoryRepresentation;
 using kedi.engine.Services.Sessions;
 using Microsoft.Diagnostics.Runtime;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +12,7 @@ namespace kedi.engine.Services.Analyze
     {
         private static object analyzeOrchestratorSync = new object();
         ISessionManager sessionManager = ContainerManager.Container.Resolve<ISessionManager>();
+        ILogger logger = ContainerManager.Container.Resolve<ILogger>();
 
         public Dictionary<string, ClrRuntime> activeRuntimes = new Dictionary<string, ClrRuntime>();
         public Dictionary<string, MemoryMap> activeMemoryMaps = new Dictionary<string, MemoryMap>();
@@ -84,6 +86,7 @@ namespace kedi.engine.Services.Analyze
 
         public ClrRuntime CreateRuntime(string dumpLocation)
         {
+            logger.Information("Dump file is opening.");
             DataTarget dataTarget = DataTarget.LoadCrashDump(dumpLocation);
 
             bool isTarget64Bit = dataTarget.PointerSize == 8;
