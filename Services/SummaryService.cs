@@ -1,17 +1,20 @@
 ﻿using kedi.engine.Services.Analyze;
 using kedi.engine.Services.Sessions;
 using Microsoft.Diagnostics.Runtime;
+using Serilog;
 using System.Collections.Generic;
 
 namespace kedi.engine.Services
 {
     public class SummaryService
     {
+        ILogger logger = ContainerManager.Container.Resolve<ILogger>();
         IAnalyzeOrchestrator analyzeOrchestrator = ContainerManager.Container.Resolve<IAnalyzeOrchestrator>();
         ISessionManager sessionManager = ContainerManager.Container.Resolve<ISessionManager>();
 
         public dynamic GetSummary(string sessionId)
         {
+            logger.Information("Successful Session");
             ClrRuntime clrRuntime = analyzeOrchestrator.GetRuntimeBySessionId(sessionId);
 
             dynamic returnValue = new
