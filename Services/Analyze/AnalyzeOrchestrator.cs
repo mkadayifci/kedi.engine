@@ -86,7 +86,7 @@ namespace kedi.engine.Services.Analyze
 
         public ClrRuntime CreateRuntime(string dumpLocation)
         {
-            logger.Information("Dump file is opening.");
+            logger.Information($"Dump file is opening: {dumpLocation}");
             DataTarget dataTarget = DataTarget.LoadCrashDump(dumpLocation);
 
             bool isTarget64Bit = dataTarget.PointerSize == 8;
