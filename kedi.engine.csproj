@@ -27,7 +27,7 @@
     <InstallUrl>https://kedi.io/publish/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>21</ApplicationRevision>
+    <ApplicationRevision>22</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -258,13 +258,13 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>LocalSettings.Designer.cs</LastGenOutput>
     </None>
-    <Content Include="webapp\js\app.558c99fb.js.map" />
+    <Content Include="webapp\js\app.77f945ab.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DumpDataFolder\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="webapp\css\app.7fe891f8.css" />
+    <Content Include="webapp\css\app.667b85e7.css" />
     <Content Include="webapp\css\chunk-vendors.746bfa0e.css" />
     <Content Include="webapp\favicon.ico" />
     <Content Include="webapp\fonts\fontawesome-webfont.674f50d2.eot" />
@@ -301,7 +301,7 @@
     <Content Include="webapp\fonts\ubuntu-mono-latin-700italic.b58ee8b3.woff2" />
     <Content Include="webapp\img\fontawesome-webfont.912ec66d.svg" />
     <Content Include="webapp\index.html" />
-    <Content Include="webapp\js\app.558c99fb.js" />
+    <Content Include="webapp\js\app.77f945ab.js" />
     <Content Include="webapp\js\chunk-vendors.f825bafe.js" />
     <Content Include="webapp\js\chunk-vendors.f825bafe.js.map" />
     <None Include="folder-ico.png" />
