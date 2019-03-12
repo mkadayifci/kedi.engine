@@ -27,7 +27,7 @@
     <InstallUrl>https://kedi.io/publish/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>23</ApplicationRevision>
+    <ApplicationRevision>24</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -258,7 +258,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>LocalSettings.Designer.cs</LastGenOutput>
     </None>
-    <Content Include="webapp\js\app.77f945ab.js.map" />
+    <Content Include="webapp\js\app.346a8128.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DumpDataFolder\" />
@@ -301,7 +301,7 @@
     <Content Include="webapp\fonts\ubuntu-mono-latin-700italic.b58ee8b3.woff2" />
     <Content Include="webapp\img\fontawesome-webfont.912ec66d.svg" />
     <Content Include="webapp\index.html" />
-    <Content Include="webapp\js\app.77f945ab.js" />
+    <Content Include="webapp\js\app.346a8128.js" />
     <Content Include="webapp\js\chunk-vendors.f825bafe.js" />
     <Content Include="webapp\js\chunk-vendors.f825bafe.js.map" />
     <None Include="folder-ico.png" />

@@ -1,5 +1,6 @@
 ﻿using kedi.engine.Services.Analyze;
 using Microsoft.Diagnostics.Runtime;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -10,6 +11,7 @@ namespace kedi.engine.Services
     public class MemoryService
     {
         IAnalyzeOrchestrator analyzeOrchestrator = ContainerManager.Container.Resolve<IAnalyzeOrchestrator>();
+        ILogger logger = ContainerManager.Container.Resolve<ILogger>();
 
         public dynamic GetMemoryStats(string sessionId)
         {
@@ -92,15 +94,22 @@ namespace kedi.engine.Services
 
         private void AddToTypeToDictionary(Dictionary<string, HeapTypeStat> dictionary, string typeName, ulong size)
         {
-            if (dictionary.ContainsKey(typeName))
-            {
-                var currentItem = dictionary[typeName];
-                currentItem.Count += 1;
-                currentItem.TotalSize += size;
+            if (!string.IsNullOrEmpty(typeName))
+            {           
+                if (dictionary.ContainsKey(typeName))
+                {
+                    var currentItem = dictionary[typeName];
+                    currentItem.Count += 1;
+                    currentItem.TotalSize += size;
+                }
+                else
+                {
+                    dictionary.Add(typeName, new HeapTypeStat() { Count = 1, TotalSize = size });
+                }
             }
             else
             {
-                dictionary.Add(typeName, new HeapTypeStat() { Count = 1, TotalSize = size });
+                logger.Information($"Controlled Exception: Type Empty {typeName ?? ""}");
             }
         }
 

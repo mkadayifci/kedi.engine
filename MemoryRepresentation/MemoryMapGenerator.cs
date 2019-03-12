@@ -48,7 +48,11 @@ namespace kedi.engine.MemoryRepresentation
 
                 if (currentType.HasSimpleValue)
                 {
-                    currentObject.Value = currentType.GetValue(objectPointer);
+                    try
+                    {
+                        currentObject.Value = currentType.GetValue(objectPointer);
+                    }
+                    catch { }
                 }
 
                 currentObject.Size = currentType.GetSize(objectPointer);
